@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home,
   Calendar,
+  CalendarDays,
   Mic2,
   Share2,
   DollarSign,
@@ -67,6 +68,14 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         descricao: 'Acompanhamento de cachês, custos operacionais e receitas.',
         caminho: '/financeira',
         icone: DollarSign,
+      },
+      {
+        id: 'agenda',
+        rotulo: 'Agenda',
+        tituloTopo: 'Agenda',
+        descricao: 'Calendário interativo de datas, horários e status de shows.',
+        caminho: '/agenda',
+        icone: CalendarDays,
       },
     ],
   },

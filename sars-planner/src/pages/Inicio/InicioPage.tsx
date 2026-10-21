@@ -3,7 +3,9 @@ import { Users, CalendarCheck2 } from 'lucide-react'
 import { SECOES_MENU_LATERAL, ITEM_MENU_AJUDA } from '@/components/layout/Sidebar'
 import { CartaoTotalizador } from '@/components/ui/CartaoTotalizador'
 import { CartaoAtalhoNavegacao } from '@/components/ui/CartaoAtalhoNavegacao'
+import agendaEventosMock from '@/mocks/agendaEventosMock.json'
 import type { IItemMenuLateral } from '@/types/navegacao.types'
+import type { IEventoAgenda } from '@/types/agenda.types'
 
 interface IAtalhoComSecao {
   categoria: string
@@ -11,8 +13,13 @@ interface IAtalhoComSecao {
 }
 
 export const InicioPage: React.FC = () => {
+  const listaEventos = agendaEventosMock as IEventoAgenda[]
+
   const totalUsuariosLogadosAgora = 1
-  const totalEventosAtivos = 0
+  const totalEventosAtivos = listaEventos.filter(
+    (evento) => evento.status_evento !== 'cancelado'
+  ).length
+
   const listaAtalhosNavegacao: IAtalhoComSecao[] = [
     ...SECOES_MENU_LATERAL.flatMap((secao) =>
       secao.itens
@@ -30,7 +37,12 @@ export const InicioPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl space-y-8">
-      <header aria-label="Resumo em tempo real do sistema" className="space-y-1">
+      <header className="space-y-1">
+        <h1 className="text-2xl font-bold text-slate-900">Início</h1>
+        <p className="text-sm text-slate-500">Bem-vindo ao SarsPlanner</p>
+      </header>
+
+      <section aria-label="Resumo em tempo real do sistema" className="space-y-3">
         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">
           Visão Geral do Sistema
         </h2>
@@ -48,12 +60,12 @@ export const InicioPage: React.FC = () => {
           <CartaoTotalizador
             titulo="Eventos Ativos"
             valorTotal={totalEventosAtivos}
-            legendaAuxiliar="Total de eventos ativos em andamento"
+            legendaAuxiliar="Total de eventos ativos programados na agenda"
             icone={CalendarCheck2}
             varianteCor="azul"
           />
         </div>
-      </header>
+      </section>
 
       <section aria-label="Atalhos rápidos de navegação" className="space-y-3">
         <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">

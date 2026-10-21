@@ -1,0 +1,47 @@
+[
+    {
+        "id": 101,
+        "seq_empresa": 1,
+        "data_evento": "2026-10-17",
+        "horario_inicio": "22:00",
+        "horario_fim": "00:00",
+        "status_evento": "concluido",
+        "realizado": true,
+        "artista": "C&R",
+        "cidade_uf": "Campo Grande - MS",
+        "valor_show": "300K GARANTIA",
+        "comissao": "30K",
+        "vendedor": "MARCOS PACHECO",
+        "producao": " EQUIPE LOCAL"
+    },
+    {
+        "id": 102,
+        "seq_empresa": 1,
+        "data_evento": "2026-10-24",
+        "horario_inicio": "19:30",
+        "horario_fim": "21:30",
+        "status_evento": "pendente",
+        "realizado": false,
+        "artista": "C&R",
+        "cidade_uf": "Guarulhos - SP",
+        "valor_show": "220K + D3,5K + LOCAL",
+        "comissao": "20K",
+        "vendedor": "MARCOS PACHECO",
+        "producao": "60K - IMPOSTO"
+    },
+    {
+        "id": 103,
+        "seq_empresa": 2,
+        "data_evento": "2026-10-24",
+        "horario_inicio": "23:00",
+        "horario_fim": "01:00",
+        "status_evento": "cancelado",
+        "realizado": false,
+        "artista": "BR",
+        "cidade_uf": "Corumbá - MS",
+        "valor_show": "DEFINIR",
+        "comissao": "SEM",
+        "vendedor": "LUCAS SOARES",
+        "producao": "A DEFINIR"
+    }
+]

@@ -4,6 +4,7 @@ import { useAutenticacao } from '@/contexts/AutenticacaoContext'
 import { LoginPage } from '@/pages/Login/LoginPage'
 import { LayoutPrincipal } from '@/components/layout/LayoutPrincipal'
 import { InicioPage } from '@/pages/Inicio/InicioPage'
+import { AgendaPage } from '@/pages/Agenda/AgendaPage'
 import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -20,11 +21,13 @@ export const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rota Pública de Login */}
         <Route
           path="/login"
           element={estaAutenticado ? <Navigate to="/inicio" replace /> : <LoginPage />}
         />
 
+        {/* Rotas Internas Protegidas pelo LayoutPrincipal */}
         <Route
           element={
             <RotaProtegida>
@@ -49,6 +52,7 @@ export const AppRoutes: React.FC = () => {
             path="/financeira"
             element={<EmDesenvolvimentoPage tituloPagina="Financeira" />}
           />
+          <Route path="/agenda" element={<AgendaPage />} />
           <Route
             path="/usuarios"
             element={<EmDesenvolvimentoPage tituloPagina="Usuários" />}
@@ -67,6 +71,7 @@ export const AppRoutes: React.FC = () => {
           />
         </Route>
 
+        {/* Redirecionamento Padrão */}
         <Route
           path="*"
           element={<Navigate to={estaAutenticado ? '/inicio' : '/login'} replace />}
