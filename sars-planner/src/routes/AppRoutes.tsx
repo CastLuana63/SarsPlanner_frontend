@@ -20,13 +20,11 @@ export const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rota Pública de Login */}
         <Route
           path="/login"
           element={estaAutenticado ? <Navigate to="/inicio" replace /> : <LoginPage />}
         />
 
-        {/* Rotas Internas Protegidas pelo LayoutPrincipal */}
         <Route
           element={
             <RotaProtegida>
@@ -69,7 +67,6 @@ export const AppRoutes: React.FC = () => {
           />
         </Route>
 
-        {/* Redirecionamento Padrão */}
         <Route
           path="*"
           element={<Navigate to={estaAutenticado ? '/inicio' : '/login'} replace />}

@@ -15,7 +15,7 @@ import {
   X,
 } from 'lucide-react'
 import { useAutenticacao } from '@/contexts/AutenticacaoContext'
-import type { ISecaoMenuLateral } from '@/types/navegacao.types'
+import type { IItemMenuLateral, ISecaoMenuLateral } from '@/types/navegacao.types'
 
 export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
   {
@@ -26,6 +26,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'inicio',
         rotulo: 'Início',
         tituloTopo: 'Tela inicial',
+        descricao: 'Visão geral do sistema e atalhos rápidos de navegação.',
         caminho: '/inicio',
         icone: Home,
       },
@@ -39,6 +40,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'eventos',
         rotulo: 'Eventos',
         tituloTopo: 'Eventos',
+        descricao: 'Planejamento, cronograma e controle de eventos ativos.',
         caminho: '/eventos',
         icone: Calendar,
       },
@@ -46,6 +48,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'artistas',
         rotulo: 'Artistas',
         tituloTopo: 'Artistas',
+        descricao: 'Cadastro de artistas, contatos, agendas e vínculos.',
         caminho: '/artistas',
         icone: Mic2,
       },
@@ -53,6 +56,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'compartilhar',
         rotulo: 'Compartilhar',
         tituloTopo: 'Compartilhar',
+        descricao: 'Compartilhamento de agendas, links externos e materiais.',
         caminho: '/compartilhar',
         icone: Share2,
       },
@@ -60,6 +64,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'financeira',
         rotulo: 'Financeira',
         tituloTopo: 'Financeira',
+        descricao: 'Acompanhamento de cachês, custos operacionais e receitas.',
         caminho: '/financeira',
         icone: DollarSign,
       },
@@ -73,6 +78,7 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'usuarios',
         rotulo: 'Usuários',
         tituloTopo: 'Usuários',
+        descricao: 'Gerenciamento de contas, acessos e equipe interna.',
         caminho: '/usuarios',
         icone: Users,
       },
@@ -80,12 +86,22 @@ export const SECOES_MENU_LATERAL: ISecaoMenuLateral[] = [
         id: 'permissoes',
         rotulo: 'Permissões',
         tituloTopo: 'Permissões',
+        descricao: 'Controle de perfis de acesso e regras de segurança.',
         caminho: '/permissoes',
         icone: ShieldCheck,
       },
     ],
   },
 ]
+
+export const ITEM_MENU_AJUDA: IItemMenuLateral = {
+  id: 'ajuda',
+  rotulo: 'Ajuda',
+  tituloTopo: 'Ajuda',
+  descricao: 'Suporte técnico, orientações de uso e documentação.',
+  caminho: '/ajuda',
+  icone: HelpCircle,
+}
 
 interface ISidebarProps {
   menuRecolhido: boolean
@@ -111,7 +127,6 @@ export const Sidebar: React.FC<ISidebarProps> = ({
 
   return (
     <>
-      {/* Overlay escuro para dispositivos móveis */}
       {menuMobileAberto && (
         <div
           className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs lg:hidden"
@@ -120,11 +135,9 @@ export const Sidebar: React.FC<ISidebarProps> = ({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-slate-200 transition-all duration-200 lg:static lg:translate-x-0 ${
-          menuMobileAberto ? 'translate-x-0 w-64' : '-translate-x-full'
-        } ${menuRecolhido ? 'lg:w-20' : 'lg:w-64'}`}
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-slate-200 transition-all duration-200 lg:static lg:translate-x-0 ${menuMobileAberto ? 'translate-x-0 w-64' : '-translate-x-full'
+          } ${menuRecolhido ? 'lg:w-20' : 'lg:w-64'}`}
       >
-        {/* Topo da Sidebar: Nome da Aplicação + Botão de Recolher */}
         <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200 shrink-0">
           {!menuRecolhido ? (
             <div className="overflow-hidden">
@@ -139,7 +152,6 @@ export const Sidebar: React.FC<ISidebarProps> = ({
             <div className="mx-auto font-black text-base text-[#1056f5]">SP</div>
           )}
 
-          {/* Botão recolher/expandir no Desktop */}
           <button
             type="button"
             onClick={alternarRecolhimentoMenu}
@@ -153,7 +165,6 @@ export const Sidebar: React.FC<ISidebarProps> = ({
             )}
           </button>
 
-          {/* Botão fechar no Mobile */}
           <button
             type="button"
             onClick={fecharMenuMobile}
@@ -163,7 +174,6 @@ export const Sidebar: React.FC<ISidebarProps> = ({
           </button>
         </div>
 
-        {/* Corpo de Navegação da Sidebar */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
           {SECOES_MENU_LATERAL.map((secao) => (
             <div key={secao.idSecao} className="space-y-1.5">
@@ -183,12 +193,10 @@ export const Sidebar: React.FC<ISidebarProps> = ({
                       onClick={fecharMenuMobile}
                       title={menuRecolhido ? item.rotulo : undefined}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${
-                          menuRecolhido ? 'justify-center' : ''
-                        } ${
-                          isActive
-                            ? 'bg-[#1056f5] text-white font-semibold shadow-xs'
-                            : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
+                        } ${isActive
+                          ? 'bg-[#1056f5] text-white font-semibold shadow-xs'
+                          : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                         }`
                       }
                     >
@@ -202,33 +210,29 @@ export const Sidebar: React.FC<ISidebarProps> = ({
           ))}
         </nav>
 
-        {/* Rodapé da Sidebar: Ajuda e Sair */}
         <div className="border-t border-slate-200 p-3 space-y-1 shrink-0">
           <NavLink
-            to="/ajuda"
+            to={ITEM_MENU_AJUDA.caminho}
             onClick={fecharMenuMobile}
-            title={menuRecolhido ? 'Ajuda' : undefined}
+            title={menuRecolhido ? ITEM_MENU_AJUDA.rotulo : undefined}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${
-                menuRecolhido ? 'justify-center' : ''
-              } ${
-                isActive
-                  ? 'bg-[#1056f5] text-white font-semibold'
-                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+              `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
+              } ${isActive
+                ? 'bg-[#1056f5] text-white font-semibold'
+                : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
               }`
             }
           >
             <HelpCircle className="w-5 h-5 shrink-0" />
-            {!menuRecolhido && <span>Ajuda</span>}
+            {!menuRecolhido && <span>{ITEM_MENU_AJUDA.rotulo}</span>}
           </NavLink>
 
           <button
             type="button"
             onClick={manipularSaida}
             title={menuRecolhido ? 'Sair' : undefined}
-            className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ${
-              menuRecolhido ? 'justify-center' : ''
-            }`}
+            className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ${menuRecolhido ? 'justify-center' : ''
+              }`}
           >
             <LogOut className="w-5 h-5 shrink-0" />
             {!menuRecolhido && <span>Sair</span>}
