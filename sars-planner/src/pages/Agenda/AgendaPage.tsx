@@ -128,7 +128,6 @@ export const AgendaPage: React.FC = () => {
                         <span className="px-1.5 py-0.5 rounded-full bg-[#1056f5]/15 text-[#1056f5] font-bold text-[10px]">
                             2 eventos
                         </span>
-                        Quantidade no dia
                     </span>
                 </div>
             </header>
