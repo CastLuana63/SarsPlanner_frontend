@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "nome": "Administrador Sars",
+    "email": "adm@gmail.com",
+    "senha": "adm123456",
+    "iniciais": "AS",
+    "cargo": "Administrador Geral"
+  }
+]
