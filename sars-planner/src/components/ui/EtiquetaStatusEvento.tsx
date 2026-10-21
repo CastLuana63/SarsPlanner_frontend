@@ -31,9 +31,9 @@ export const EtiquetaStatusEvento: React.FC<IEtiquetaStatusEventoProps> = ({ sta
 
     return (
         <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide ${configAtual.classesContainer}`}
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${configAtual.classesContainer}`}
         >
-            <span className={`w-2 h-2 rounded-full ${configAtual.classePonto}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${configAtual.classePonto}`} />
             {configAtual.rotulo}
         </span>
     )

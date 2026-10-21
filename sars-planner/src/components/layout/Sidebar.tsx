@@ -144,28 +144,28 @@ export const Sidebar: React.FC<ISidebarProps> = ({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-slate-200 transition-all duration-200 lg:static lg:translate-x-0 ${menuMobileAberto ? 'translate-x-0 w-64' : '-translate-x-full'
-          } ${menuRecolhido ? 'lg:w-20' : 'lg:w-64'}`}
+        className={`fixed inset-y-0 left-0 z-40 h-screen shrink-0 flex flex-col bg-white border-r border-slate-200 transition-all duration-200 lg:static lg:translate-x-0 ${menuMobileAberto ? 'translate-x-0 w-56' : '-translate-x-full'
+          } ${menuRecolhido ? 'lg:w-16' : 'lg:w-56'}`}
       >
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-200 shrink-0">
+        <div className="h-14 px-3.5 flex items-center justify-between border-b border-slate-200 shrink-0">
           {!menuRecolhido ? (
             <div className="overflow-hidden">
-              <h2 className="text-base font-bold text-slate-900 truncate">
+              <h2 className="text-sm font-bold text-slate-900 truncate leading-tight">
                 SarsPlanner
               </h2>
-              <p className="text-xs text-slate-500 truncate">
+              <p className="text-[11px] text-slate-500 truncate leading-tight">
                 Soluções em tecnologia
               </p>
             </div>
           ) : (
-            <div className="mx-auto font-black text-base text-[#1056f5]">SP</div>
+            <div className="mx-auto font-black text-sm text-[#1056f5]">SP</div>
           )}
 
           <button
             type="button"
             onClick={alternarRecolhimentoMenu}
             title={menuRecolhido ? 'Expandir menu' : 'Recolher menu'}
-            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer"
+            className="hidden lg:flex items-center justify-center w-6 h-6 rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer"
           >
             {menuRecolhido ? (
               <ChevronRight className="w-4 h-4" />
@@ -177,22 +177,22 @@ export const Sidebar: React.FC<ISidebarProps> = ({
           <button
             type="button"
             onClick={fecharMenuMobile}
-            className="flex lg:hidden items-center justify-center w-8 h-8 rounded-lg text-slate-500 hover:bg-slate-100"
+            className="flex lg:hidden items-center justify-center w-7 h-7 rounded-md text-slate-500 hover:bg-slate-100"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <nav className="flex-1 overflow-y-auto px-2.5 py-3 space-y-4">
           {SECOES_MENU_LATERAL.map((secao) => (
-            <div key={secao.idSecao} className="space-y-1.5">
+            <div key={secao.idSecao} className="space-y-1">
               {!menuRecolhido && (
-                <span className="px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400 block">
+                <span className="px-2.5 text-[10px] font-semibold uppercase tracking-wider text-slate-400 block">
                   {secao.tituloSecao}
                 </span>
               )}
 
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {secao.itens.map((item) => {
                   const IconeComponente = item.icone
                   return (
@@ -202,14 +202,14 @@ export const Sidebar: React.FC<ISidebarProps> = ({
                       onClick={fecharMenuMobile}
                       title={menuRecolhido ? item.rotulo : undefined}
                       className={({ isActive }) =>
-                        `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
+                        `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs sm:text-[13px] font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
                         } ${isActive
-                          ? 'bg-[#1056f5] text-white font-semibold shadow-xs'
+                          ? 'bg-[#1056f5] text-white font-semibold shadow-2xs'
                           : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                         }`
                       }
                     >
-                      <IconeComponente className="w-5 h-5 shrink-0" />
+                      <IconeComponente className="w-4 h-4 shrink-0" />
                       {!menuRecolhido && <span className="truncate">{item.rotulo}</span>}
                     </NavLink>
                   )
@@ -219,20 +219,20 @@ export const Sidebar: React.FC<ISidebarProps> = ({
           ))}
         </nav>
 
-        <div className="border-t border-slate-200 p-3 space-y-1 shrink-0">
+        <div className="border-t border-slate-200 p-2.5 space-y-0.5 shrink-0">
           <NavLink
             to={ITEM_MENU_AJUDA.caminho}
             onClick={fecharMenuMobile}
             title={menuRecolhido ? ITEM_MENU_AJUDA.rotulo : undefined}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
+              `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs sm:text-[13px] font-medium transition-colors ${menuRecolhido ? 'justify-center' : ''
               } ${isActive
                 ? 'bg-[#1056f5] text-white font-semibold'
                 : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
               }`
             }
           >
-            <HelpCircle className="w-5 h-5 shrink-0" />
+            <HelpCircle className="w-4 h-4 shrink-0" />
             {!menuRecolhido && <span>{ITEM_MENU_AJUDA.rotulo}</span>}
           </NavLink>
 
@@ -240,10 +240,10 @@ export const Sidebar: React.FC<ISidebarProps> = ({
             type="button"
             onClick={manipularSaida}
             title={menuRecolhido ? 'Sair' : undefined}
-            className={`w-full flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ${menuRecolhido ? 'justify-center' : ''
+            className={`w-full flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs sm:text-[13px] font-medium text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors cursor-pointer ${menuRecolhido ? 'justify-center' : ''
               }`}
           >
-            <LogOut className="w-5 h-5 shrink-0" />
+            <LogOut className="w-4 h-4 shrink-0" />
             {!menuRecolhido && <span>Sair</span>}
           </button>
         </div>

@@ -26,27 +26,27 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
     aoIrParaMesPadrao,
 }) => {
     return (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-[0_2px_12px_rgba(15,23,42,0.03)] overflow-hidden flex flex-col">
-            <div className="px-5 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-[#1056f5] flex items-center justify-center">
-                        <CalendarIcon className="w-5 h-5" />
+        <div className="bg-white rounded-xl border border-slate-200 shadow-[0_2px_10px_rgba(15,23,42,0.03)] overflow-hidden flex flex-col">
+            <div className="px-4 py-2.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#1056f5] flex items-center justify-center shrink-0">
+                        <CalendarIcon className="w-4 h-4" />
                     </div>
                     <div>
-                        <h2 className="text-base sm:text-lg font-bold text-slate-900 capitalize">
+                        <h2 className="text-sm sm:text-base font-bold text-slate-900 capitalize leading-tight">
                             {tituloMesAno}
                         </h2>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-[11px] text-slate-500 leading-tight">
                             Clique em um dia destacado em azul para ver os horários e detalhes
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                     <button
                         type="button"
                         onClick={aoIrParaMesPadrao}
-                        className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
+                        className="px-2.5 py-1 rounded-md border border-slate-300 bg-white text-[11px] font-semibold text-slate-700 hover:bg-slate-50 transition cursor-pointer"
                     >
                         Outubro / 2026
                     </button>
@@ -55,18 +55,18 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                         type="button"
                         onClick={aoNavegarMesAnterior}
                         title="Mês anterior"
-                        className="p-1.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
+                        className="p-1 rounded-md border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
                     >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-3.5 h-3.5" />
                     </button>
 
                     <button
                         type="button"
                         onClick={aoNavegarProximoMes}
                         title="Próximo mês"
-                        className="p-1.5 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
+                        className="p-1 rounded-md border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
                     >
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                 </div>
             </div>
@@ -75,7 +75,7 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                 {DIAS_SEMANA.map((dia) => (
                     <div
                         key={dia}
-                        className="py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-slate-500"
+                        className="py-1.5 text-center text-[10px] font-bold uppercase tracking-wider text-slate-500"
                     >
                         {dia}
                     </div>
@@ -94,9 +94,9 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                             type="button"
                             disabled={!possuiEventos}
                             onClick={() => possuiEventos && aoSelecionarDiaComEvento(dia.dataIso)}
-                            className={`relative text-left p-2 sm:p-3 transition-all flex flex-col justify-between ${painelLateralAberto
-                                    ? 'min-h-[88px] sm:min-h-[104px]'
-                                    : 'min-h-[104px] sm:min-h-[124px]'
+                            className={`relative text-left p-1.5 sm:p-2 transition-all flex flex-col justify-between ${painelLateralAberto
+                                    ? 'min-h-[64px] sm:min-h-[70px]'
+                                    : 'min-h-[68px] sm:min-h-[76px]'
                                 } ${!dia.ehMesAtual
                                     ? 'bg-slate-50/60 text-slate-300'
                                     : 'bg-white text-slate-700'
@@ -109,7 +109,7 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                         >
                             <div className="w-full flex items-center justify-between gap-1">
                                 <span
-                                    className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs sm:text-sm font-bold ${possuiEventos
+                                    className={`inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-[11px] font-bold ${possuiEventos
                                             ? estaSelecionado
                                                 ? 'bg-white text-[#1056f5]'
                                                 : 'bg-[#1056f5] text-white'
@@ -124,24 +124,24 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                                 {possuiEventos && (
                                     <span
                                         title={`${quantidadeEventos} evento(s) programado(s)`}
-                                        className={`inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[11px] font-extrabold ${estaSelecionado
+                                        className={`inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none ${estaSelecionado
                                                 ? 'bg-blue-800 text-white'
                                                 : 'bg-[#1056f5]/15 text-[#1056f5]'
                                             }`}
                                     >
-                                        {quantidadeEventos}
+                                        {quantidadeEventos} {quantidadeEventos === 1 ? 'ev.' : 'evs.'}
                                     </span>
                                 )}
                             </div>
 
                             {possuiEventos && (
-                                <div className="mt-2 w-full space-y-1 overflow-hidden">
+                                <div className="mt-1 w-full space-y-0.5 overflow-hidden">
                                     {dia.eventosDoDia.slice(0, 2).map((evento) => (
                                         <div
                                             key={evento.id}
-                                            className={`truncate rounded-md px-1.5 py-1 text-[11px] font-semibold leading-tight ${estaSelecionado
+                                            className={`truncate rounded px-1.5 py-0.5 text-[10px] font-semibold leading-tight ${estaSelecionado
                                                     ? 'bg-white/20 text-white'
-                                                    : 'bg-[#1056f5] text-white shadow-2xs'
+                                                    : 'bg-[#1056f5] text-white'
                                                 }`}
                                         >
                                             {evento.horario_inicio} • {evento.artista} ({evento.cidade_uf})

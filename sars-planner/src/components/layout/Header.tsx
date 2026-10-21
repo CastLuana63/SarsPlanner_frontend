@@ -6,9 +6,13 @@ import { SECOES_MENU_LATERAL } from './Sidebar'
 
 interface IHeaderProps {
   abrirMenuMobile: () => void
+  estaRolando?: boolean
 }
 
-export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
+export const Header: React.FC<IHeaderProps> = ({
+  abrirMenuMobile,
+  estaRolando = false,
+}) => {
   const location = useLocation()
   const navigate = useNavigate()
   const { usuarioLogado, realizarLogout } = useAutenticacao()
@@ -18,7 +22,6 @@ export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
 
   const containerDireitoRef = useRef<HTMLDivElement>(null)
 
-  // Obtém o título da página atual com base na rota ativa
   const obterTituloPaginaAtual = (): string => {
     if (location.pathname === '/ajuda') return 'Ajuda'
     if (location.pathname === '/configuracoes') return 'Configurações'
@@ -32,7 +35,6 @@ export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
     return 'Tela inicial'
   }
 
-  // Fecha os dropdowns ao clicar fora
   useEffect(() => {
     const manipularCliqueFora = (evento: MouseEvent) => {
       if (
@@ -69,69 +71,68 @@ export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
   }
 
   return (
-    <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between shrink-0">
-      {/* Lado Esquerdo: Botão Mobile + Título da Tela */}
+    <header
+      className={`sticky top-0 z-20 h-14 px-4 sm:px-5 flex items-center justify-between shrink-0 transition-all duration-200 ${estaRolando
+          ? 'bg-white/65 backdrop-blur-md border-b border-slate-200/60 shadow-2xs'
+          : 'bg-white border-b border-slate-200'
+        }`}
+    >
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={abrirMenuMobile}
-          className="lg:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-slate-600 hover:bg-slate-100"
+          className="lg:hidden inline-flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 hover:bg-slate-100"
           aria-label="Abrir menu lateral"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <span className="text-sm sm:text-base font-medium text-slate-500">
+        <span className="text-xs sm:text-sm font-medium text-slate-500">
           {obterTituloPaginaAtual()}
         </span>
       </div>
 
-      {/* Lado Direito: Ícone de Notificação (à esquerda) + Avatar do Usuário com Configurações */}
-      <div ref={containerDireitoRef} className="relative flex items-center gap-3">
-        {/* Botão de Notificação posicionado à esquerda do ícone do usuário */}
+      <div ref={containerDireitoRef} className="relative flex items-center gap-2.5">
         <button
           type="button"
           onClick={alternarNotificacoes}
           title="Notificações"
-          className="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition cursor-pointer"
+          className="relative inline-flex items-center justify-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition cursor-pointer"
         >
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-[#1056f5] ring-2 ring-white" />
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#1056f5] ring-2 ring-white" />
         </button>
 
-        {/* Dropdown de Notificações */}
         {notificacaoAberta && (
-          <div className="absolute right-12 top-12 z-50 w-72 rounded-xl bg-white shadow-lg border border-slate-200 p-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+          <div className="absolute right-10 top-11 z-50 w-68 rounded-xl bg-white shadow-lg border border-slate-200 p-3.5">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
                 Notificações
               </span>
-              <span className="text-[11px] text-blue-600 font-medium">Recentes</span>
+              <span className="text-[10px] text-blue-600 font-medium">Recentes</span>
             </div>
-            <p className="text-xs text-slate-500 text-center py-4">
+            <p className="text-xs text-slate-500 text-center py-3">
               Central de notificações em desenvolvimento.
             </p>
           </div>
         )}
 
-        {/* Ícone Circular do Usuário */}
         <button
           type="button"
           onClick={alternarMenuUsuario}
           title="Configurações e Conta"
-          className="w-10 h-10 rounded-full bg-[#1056f5] text-white text-sm font-bold flex items-center justify-center shadow-xs hover:bg-blue-700 transition cursor-pointer select-none"
+          className="w-8 h-8 rounded-full bg-[#1056f5] text-white text-xs font-bold flex items-center justify-center shadow-xs hover:bg-blue-700 transition cursor-pointer select-none"
         >
           {usuarioLogado?.iniciais || 'AS'}
         </button>
 
-        {/* Dropdown de Configuração do Usuário */}
         {menuUsuarioAberto && (
-          <div className="absolute right-0 top-12 z-50 w-64 rounded-xl bg-white shadow-lg border border-slate-200 py-2">
-            <div className="px-4 py-2.5 border-b border-slate-100">
-              <p className="text-sm font-semibold text-slate-900 truncate">
+          <div className="absolute right-0 top-11 z-50 w-60 rounded-xl bg-white shadow-lg border border-slate-200 py-1.5">
+            <div className="px-3.5 py-2 border-b border-slate-100">
+              <p className="text-xs font-semibold text-slate-900 truncate">
                 {usuarioLogado?.nome || 'Administrador'}
               </p>
-              <p className="text-xs text-slate-500 truncate">
+              <p className="text-[11px] text-slate-500 truncate">
                 {usuarioLogado?.email || 'adm@gmail.com'}
               </p>
             </div>
@@ -140,18 +141,18 @@ export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
               <button
                 type="button"
                 onClick={irParaConfiguracoes}
-                className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-2.5 cursor-pointer"
+                className="w-full px-3.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-100 flex items-center gap-2 cursor-pointer"
               >
-                <Settings className="w-4 h-4 text-slate-500" />
+                <Settings className="w-3.5 h-3.5 text-slate-500" />
                 <span>Configurações</span>
               </button>
 
               <button
                 type="button"
                 onClick={irParaConfiguracoes}
-                className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-2.5 cursor-pointer"
+                className="w-full px-3.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-100 flex items-center gap-2 cursor-pointer"
               >
-                <User className="w-4 h-4 text-slate-500" />
+                <User className="w-3.5 h-3.5 text-slate-500" />
                 <span>Meu Perfil</span>
               </button>
             </div>
@@ -160,9 +161,9 @@ export const Header: React.FC<IHeaderProps> = ({ abrirMenuMobile }) => {
               <button
                 type="button"
                 onClick={manipularLogout}
-                className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2.5 cursor-pointer"
+                className="w-full px-3.5 py-1.5 text-left text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5" />
                 <span>Sair da conta</span>
               </button>
             </div>
