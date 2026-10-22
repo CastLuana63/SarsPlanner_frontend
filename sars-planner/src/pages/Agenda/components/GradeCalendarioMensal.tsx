@@ -129,7 +129,7 @@ export const GradeCalendarioMensal: React.FC<IGradeCalendarioMensalProps> = ({
                                                 : 'bg-[#1056f5]/15 text-[#1056f5]'
                                             }`}
                                     >
-                                        {quantidadeEventos} {quantidadeEventos === 1 ? 'ev.' : 'evs.'}
+                                        {quantidadeEventos}
                                     </span>
                                 )}
                             </div>

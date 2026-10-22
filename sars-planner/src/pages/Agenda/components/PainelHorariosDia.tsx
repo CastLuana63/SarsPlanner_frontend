@@ -7,7 +7,6 @@ import {
     DollarSign,
     UserCheck,
     Briefcase,
-    Building2,
     CheckCircle2,
 } from 'lucide-react'
 import { EtiquetaStatusEvento } from '@/components/ui/EtiquetaStatusEvento'
