@@ -121,17 +121,6 @@ export const PainelHorariosDia: React.FC<IPainelHorariosDiaProps> = ({
                                 </span>
                             </div>
                         </div>
-
-                        <div className="pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400">
-                            <span className="inline-flex items-center gap-1 font-medium">
-                                <Building2 className="w-3 h-3" />
-                                seq_empresa: <strong className="text-slate-600">{evento.seq_empresa}</strong>
-                            </span>
-
-                            <span className="font-semibold">
-                                Realizado: {evento.realizado ? 'Sim' : 'Não'}
-                            </span>
-                        </div>
                     </div>
                 ))}
             </div>
