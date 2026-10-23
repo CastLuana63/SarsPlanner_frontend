@@ -5,6 +5,7 @@ import { LoginPage } from '@/pages/Login/LoginPage'
 import { LayoutPrincipal } from '@/components/layout/LayoutPrincipal'
 import { InicioPage } from '@/pages/Inicio/InicioPage'
 import { AgendaPage } from '@/pages/Agenda/AgendaPage'
+import { ArtistasPage } from '@/pages/Artista/ArtistasPage'
 import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -40,10 +41,7 @@ export const AppRoutes: React.FC = () => {
             path="/eventos"
             element={<EmDesenvolvimentoPage tituloPagina="Eventos" />}
           />
-          <Route
-            path="/artistas"
-            element={<EmDesenvolvimentoPage tituloPagina="Artistas" />}
-          />
+          <Route path="/artistas" element={<ArtistasPage />} />
           <Route
             path="/compartilhar"
             element={<EmDesenvolvimentoPage tituloPagina="Compartilhar" />}

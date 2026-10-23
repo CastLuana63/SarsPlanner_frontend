@@ -1,0 +1,42 @@
+[
+    {
+        "id": 31,
+        "nome_artista": "CLAYTON E ROMÁRIO",
+        "nome_social": "C&R",
+        "email": "contato@claytoneromario.com.br",
+        "telefone": "(62) 99812-3400",
+        "quantidade_eventos": 14
+    },
+    {
+        "id": 34,
+        "nome_artista": "BRUNO ROSA",
+        "nome_social": "BR",
+        "email": "agenda@brunorosa.com.br",
+        "telefone": "(16) 99745-1122",
+        "quantidade_eventos": 9
+    },
+    {
+        "id": 35,
+        "nome_artista": "MATHEUZINHO",
+        "nome_social": "MTZ",
+        "email": "shows@matheuzinho.com.br",
+        "telefone": "(11) 99104-8890",
+        "quantidade_eventos": 6
+    },
+    {
+        "id": 36,
+        "nome_artista": "ALEX E MEDINA",
+        "nome_social": "A&M",
+        "email": "producao@alexemedina.com.br",
+        "telefone": "(34) 99630-4510",
+        "quantidade_eventos": 11
+    },
+    {
+        "id": 37,
+        "nome_artista": "THÁCIO",
+        "nome_social": "TH",
+        "email": "contato@thaciooficial.com.br",
+        "telefone": "(34) 99988-7766",
+        "quantidade_eventos": 8
+    }
+]
