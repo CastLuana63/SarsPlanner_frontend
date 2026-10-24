@@ -44,7 +44,7 @@ export const ArtistasPage: React.FC = () => {
             }
         })
     }
-    
+
     const artistasFiltradosEOrdenados = useMemo<IArtista[]>(() => {
         const termoLimpo = termoBusca.trim().toLowerCase()
 
@@ -154,7 +154,19 @@ export const ArtistasPage: React.FC = () => {
 
     return (
         <div id="area-impressao-artistas" className="space-y-4">
-            <header className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between bg-white p-3 rounded-xl border border-slate-200 print:hidden">
+                <div className="relative w-full sm:w-72">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                        type="text"
+                        value={termoBusca}
+                        onChange={(e) => setTermoBusca(e.target.value)}
+                        placeholder="Buscar por nome, sigla ou e-mail..."
+                        className="w-full rounded-lg border border-slate-300 bg-slate-50/50 pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#1056f5] focus:bg-white focus:outline-none"
+                    />
+                </div>
+
+
                 <div className="flex flex-wrap items-center gap-2 print:hidden">
                     <button
                         type="button"
@@ -186,35 +198,6 @@ export const ArtistasPage: React.FC = () => {
                     >
                         Criar Artista/Apresentador
                     </Botao>
-                </div>
-            </header>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 print:hidden">
-                <div className="relative w-full sm:w-72">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                        type="text"
-                        value={termoBusca}
-                        onChange={(e) => setTermoBusca(e.target.value)}
-                        placeholder="Buscar por nome, sigla ou e-mail..."
-                        className="w-full rounded-lg border border-slate-300 bg-slate-50/50 pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#1056f5] focus:bg-white focus:outline-none"
-                    />
-                </div>
-
-                <div className="flex items-center gap-3 text-[11px] text-slate-500">
-                    <span>
-                        Ordenado por:{' '}
-                        <strong className="text-slate-800">
-                            {ordenacaoAtual.colunaAtiva === 'nome_artista'
-                                ? 'Nome Artista'
-                                : 'Nome Social'}{' '}
-                            ({ordenacaoAtual.direcao === 'asc' ? 'A-Z' : 'Z-A'})
-                        </strong>
-                    </span>
-                    <span className="text-slate-300">|</span>
-                    <span>
-                        Total: <strong className="text-slate-800">{artistasFiltradosEOrdenados.length}</strong>
-                    </span>
                 </div>
             </div>
 
