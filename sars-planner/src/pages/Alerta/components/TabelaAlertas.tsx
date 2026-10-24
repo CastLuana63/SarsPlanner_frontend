@@ -62,7 +62,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                         ) : (
                             gruposPorMesAno.map((grupo) => (
                                 <React.Fragment key={grupo.tituloGrupo}>
-                                    {/* Faixa divisória de Mês | Ano alinhada ao estilo clean da tabela de Artistas */}
                                     <tr className="bg-slate-100/80 border-y border-slate-200">
                                         <td
                                             colSpan={7}
@@ -83,7 +82,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                         : 'hover:bg-slate-50/80'
                                                 }`}
                                         >
-                                            {/* Dia */}
                                             <td className="py-2.5 px-4 text-center font-bold text-slate-900">
                                                 <div className="inline-flex items-center justify-center gap-1.5">
                                                     {!alerta.lida && !alerta.concluida && (
@@ -96,7 +94,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 </div>
                                             </td>
 
-                                            {/* Data do Show */}
                                             <td className="py-2.5 px-4 text-center text-slate-600">
                                                 <span className="inline-flex items-center justify-center gap-1.5">
                                                     <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0 print:hidden" />
@@ -104,7 +101,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 </span>
                                             </td>
 
-                                            {/* Cidade - UF */}
                                             <td className="py-2.5 px-4 font-bold text-slate-900">
                                                 <span className="inline-flex items-center gap-1.5">
                                                     <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 print:hidden" />
@@ -112,14 +108,12 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 </span>
                                             </td>
 
-                                            {/* Artista (Mesmo badge azul da tela de Artistas) */}
                                             <td className="py-2.5 px-4 text-center">
                                                 <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1056f5] border border-blue-200/70">
                                                     {alerta.artista}
                                                 </span>
                                             </td>
 
-                                            {/* Categoria */}
                                             <td className="py-2.5 px-4 text-center">
                                                 <span className="inline-flex items-center justify-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
                                                     <span
@@ -130,7 +124,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 </span>
                                             </td>
 
-                                            {/* Descrição */}
                                             <td
                                                 className={`py-2.5 px-4 ${alerta.concluida
                                                         ? 'line-through text-slate-400'
@@ -140,13 +133,11 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 {alerta.descricao}
                                             </td>
 
-                                            {/* Ações lado a lado no mesmo padrão visual da TabelaArtistas */}
                                             <td
                                                 className="py-2.5 px-4 text-center print:hidden"
                                                 onClick={(e) => e.stopPropagation()}
                                             >
                                                 <div className="inline-flex items-center justify-center gap-1.5">
-                                                    {/* Botão Acessar Financeiro do Evento (Inativo por enquanto) */}
                                                     <div className="relative group">
                                                         <button
                                                             type="button"
@@ -162,7 +153,6 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                         </span>
                                                     </div>
 
-                                                    {/* Botão Concluir Notificação */}
                                                     <div className="relative group">
                                                         <button
                                                             type="button"

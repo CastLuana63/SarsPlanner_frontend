@@ -65,7 +65,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
             onSubmit={manipularSubmit}
             className="bg-white p-3 rounded-xl border border-slate-200 shadow-[0_2px_10px_rgba(15,23,42,0.03)] space-y-2.5 print:hidden"
         >
-            {/* Linha 1: Artista, Status, Ano, Mês, Cidade e UF */}
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-12 gap-2">
                 <div className="lg:col-span-2">
                     <select
@@ -145,7 +144,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                 </div>
             </div>
 
-            {/* Linha 2: Categoria, Busca por Descrição, Totalizador e Ações (Filtrar, Limpar + 3 Pontos) */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
                 <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[260px]">
                     <div className="w-full sm:w-44">
@@ -169,8 +167,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                         />
                     </div>
                 </div>
-
-                {/* Botões Filtrar, Limpar e Menu de 3 Pontos (Exportação) */}
                 <div className="flex items-center gap-2 ml-auto">
                     <span className="hidden xl:inline-block text-[11px] text-slate-500 mr-1">
                         Total: <strong className="text-slate-800">{totalFiltrados}</strong>
@@ -193,7 +189,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                         <span>Limpar</span>
                     </button>
 
-                    {/* Botão de 3 Pontos ao lado de Limpar com Exportar CSV e PDF */}
                     <div ref={menuOpcoesRef} className="relative">
                         <button
                             type="button"
