@@ -7,6 +7,7 @@ import { InicioPage } from '@/pages/Inicio/InicioPage'
 import { AgendaPage } from '@/pages/Agenda/AgendaPage'
 import { ArtistasPage } from '@/pages/Artista/ArtistasPage'
 import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
+import { AlertasPage } from '@/pages/Alerta/AlertasPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { estaAutenticado } = useAutenticacao()
@@ -22,13 +23,11 @@ export const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rota Pública de Login */}
         <Route
           path="/login"
           element={estaAutenticado ? <Navigate to="/inicio" replace /> : <LoginPage />}
         />
 
-        {/* Rotas Internas Protegidas pelo LayoutPrincipal */}
         <Route
           element={
             <RotaProtegida>
@@ -51,6 +50,7 @@ export const AppRoutes: React.FC = () => {
             element={<EmDesenvolvimentoPage tituloPagina="Financeira" />}
           />
           <Route path="/agenda" element={<AgendaPage />} />
+          <Route path="/alertas" element={<AlertasPage />} />
           <Route
             path="/usuarios"
             element={<EmDesenvolvimentoPage tituloPagina="Usuários" />}
@@ -69,7 +69,6 @@ export const AppRoutes: React.FC = () => {
           />
         </Route>
 
-        {/* Redirecionamento Padrão */}
         <Route
           path="*"
           element={<Navigate to={estaAutenticado ? '/inicio' : '/login'} replace />}

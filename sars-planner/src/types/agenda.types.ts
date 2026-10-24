@@ -3,9 +3,9 @@ export type TipoStatusEvento = 'pendente' | 'concluido' | 'cancelado'
 export interface IEventoAgenda {
   id: number
   seq_empresa: number
-  data_evento: string // Formato ISO: YYYY-MM-DD
-  horario_inicio: string // "21:00"
-  horario_fim: string // "23:30"
+  data_evento: string
+  horario_inicio: string 
+  horario_fim: string 
   status_evento: TipoStatusEvento
   realizado: boolean
   artista: string

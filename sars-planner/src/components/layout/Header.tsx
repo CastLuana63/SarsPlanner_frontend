@@ -1,7 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Bell, Menu, Settings, User, LogOut } from 'lucide-react'
+import {
+  Bell,
+  Menu,
+  Settings,
+  User,
+  LogOut,
+  CheckCheck,
+  Flag,
+  Check,
+  ArrowRight,
+  DollarSign,
+} from 'lucide-react'
 import { useAutenticacao } from '@/contexts/AutenticacaoContext'
+import { useNotificacoes } from '@/contexts/NotificacoesContext'
 import { SECOES_MENU_LATERAL } from './Sidebar'
 
 interface IHeaderProps {
@@ -16,6 +28,14 @@ export const Header: React.FC<IHeaderProps> = ({
   const location = useLocation()
   const navigate = useNavigate()
   const { usuarioLogado, realizarLogout } = useAutenticacao()
+  const {
+    listaAlertas,
+    cincoAlertasMaisRecentes,
+    quantidadeNaoLidasRecentes,
+    marcarTodasComoLidas,
+    marcarAlertaComoLido,
+    alternarConclusaoAlerta,
+  } = useNotificacoes()
 
   const [menuUsuarioAberto, setMenuUsuarioAberto] = useState<boolean>(false)
   const [notificacaoAberta, setNotificacaoAberta] = useState<boolean>(false)
@@ -23,11 +43,14 @@ export const Header: React.FC<IHeaderProps> = ({
   const containerDireitoRef = useRef<HTMLDivElement>(null)
 
   const obterTituloPaginaAtual = (): string => {
+    if (location.pathname === '/alertas') return 'Alertas de Pagamento'
     if (location.pathname === '/ajuda') return 'Ajuda'
     if (location.pathname === '/configuracoes') return 'Configurações'
 
     for (const secao of SECOES_MENU_LATERAL) {
-      const itemEncontrado = secao.itens.find((item) => item.caminho === location.pathname)
+      const itemEncontrado = secao.itens.find(
+        (item) => item.caminho === location.pathname
+      )
       if (itemEncontrado) {
         return itemEncontrado.tituloTopo
       }
@@ -57,6 +80,11 @@ export const Header: React.FC<IHeaderProps> = ({
   const alternarMenuUsuario = () => {
     setMenuUsuarioAberto((estadoAnterior) => !estadoAnterior)
     setNotificacaoAberta(false)
+  }
+
+  const irParaTelaTodosAlertas = () => {
+    setNotificacaoAberta(false)
+    navigate('/alertas')
   }
 
   const irParaConfiguracoes = () => {
@@ -96,27 +124,136 @@ export const Header: React.FC<IHeaderProps> = ({
         <button
           type="button"
           onClick={alternarNotificacoes}
-          title="Notificações"
+          title="Alertas e Notificações de Pagamento"
           className="relative inline-flex items-center justify-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 transition cursor-pointer"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#1056f5] ring-2 ring-white" />
+          {quantidadeNaoLidasRecentes > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#1056f5] text-white text-[10px] font-extrabold flex items-center justify-center ring-2 ring-white">
+              {quantidadeNaoLidasRecentes}
+            </span>
+          )}
         </button>
 
         {notificacaoAberta && (
-          <div className="absolute right-10 top-11 z-50 w-68 rounded-xl bg-white shadow-lg border border-slate-200 p-3.5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2.5">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                Notificações
-              </span>
-              <span className="text-[10px] text-blue-600 font-medium">Recentes</span>
+          <div className="absolute right-10 top-11 z-50 w-80 sm:w-96 rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden">
+            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  Notificações
+                </span>
+                <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-extrabold text-[#1056f5]">
+                  {quantidadeNaoLidasRecentes} recentes
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={marcarTodasComoLidas}
+                disabled={quantidadeNaoLidasRecentes === 0}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#1056f5] hover:text-blue-700 disabled:text-slate-400 disabled:cursor-not-allowed cursor-pointer"
+              >
+                <CheckCheck className="w-3.5 h-3.5" />
+                <span>Ler todas</span>
+              </button>
             </div>
-            <p className="text-xs text-slate-500 text-center py-3">
-              Central de notificações em desenvolvimento.
-            </p>
+            <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+              {cincoAlertasMaisRecentes.length === 0 ? (
+                <p className="text-xs text-slate-500 text-center py-6">
+                  Nenhum alerta de pagamento no momento.
+                </p>
+              ) : (
+                cincoAlertasMaisRecentes.map((alerta) => (
+                  <div
+                    key={alerta.id}
+                    onClick={() => marcarAlertaComoLido(alerta.id)}
+                    className={`p-3 transition-colors cursor-pointer ${alerta.concluida
+                        ? 'bg-slate-50/70 opacity-60'
+                        : !alerta.lida
+                          ? 'bg-blue-50/40 hover:bg-blue-50/70'
+                          : 'bg-white hover:bg-slate-50'
+                      }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {!alerta.lida && !alerta.concluida && (
+                            <span className="w-2 h-2 rounded-full bg-[#1056f5] shrink-0" />
+                          )}
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                            {alerta.artista}
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-800 truncate">
+                            {alerta.cidade_uf}
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            • Show: {alerta.data_show}
+                          </span>
+                        </div>
+
+                        <p
+                          className={`text-xs leading-snug ${alerta.concluida
+                              ? 'line-through text-slate-400'
+                              : 'text-slate-600'
+                            }`}
+                        >
+                          {alerta.descricao}
+                        </p>
+                      </div>
+                      <div
+                        className="flex items-center gap-1 shrink-0"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          type="button"
+                          onClick={(e) => e.preventDefault()}
+                          title="Acessar financeiro deste evento (Em breve)"
+                          className="p-1.5 rounded-md border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
+                        >
+                          <DollarSign className="w-3.5 h-3.5" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => alternarConclusaoAlerta(alerta.id)}
+                          title={
+                            alerta.concluida
+                              ? 'Notificação concluída'
+                              : 'Concluir notificação'
+                          }
+                          className={`p-1.5 rounded-md border transition cursor-pointer ${alerta.concluida
+                              ? 'bg-emerald-50 border-emerald-200 text-emerald-600'
+                              : 'bg-white border-slate-200 text-[#1e3a63] hover:bg-blue-50'
+                            }`}
+                        >
+                          {alerta.concluida ? (
+                            <Check className="w-3.5 h-3.5" />
+                          ) : (
+                            <Flag className="w-3.5 h-3.5 fill-current" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+              <span className="text-[11px] text-slate-500">
+                Exibindo {cincoAlertasMaisRecentes.length} de {listaAlertas.length} alertas
+              </span>
+
+              <button
+                type="button"
+                onClick={irParaTelaTodosAlertas}
+                className="inline-flex items-center gap-1 text-xs font-bold text-[#1056f5] hover:text-blue-700 cursor-pointer"
+              >
+                <span>Ver todos</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         )}
-
         <button
           type="button"
           onClick={alternarMenuUsuario}

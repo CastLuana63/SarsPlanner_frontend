@@ -54,14 +54,11 @@ export const LoginPage: React.FC = () => {
   return (
     <main className="min-h-screen w-full bg-[#eef2f6] flex items-center justify-center p-4 sm:p-6">
       <section className="w-full max-w-[880px] min-h-[470px] bg-white rounded-xl shadow-[0_10px_35px_rgba(15,23,42,0.06)] border border-slate-100 grid grid-cols-1 md:grid-cols-2 overflow-hidden">
-        {/* Coluna Esquerda: Identidade Visual Sars Planner */}
         <div className="flex items-center justify-center p-8 md:p-12 border-b md:border-b-0 md:border-r border-slate-200 bg-white">
           <LogoSarsPlanner />
         </div>
 
-        {/* Coluna Direita: Opções de Acesso / Formulário Interno */}
         <div className="flex flex-col justify-between p-8 sm:p-10 md:p-12 bg-white">
-          {/* Cabeçalho do Card */}
           <div className="text-center mt-2">
             <h1 className="text-2xl sm:text-[26px] font-extrabold tracking-tight text-[#1a253c]">
               SarsDev + ShowPlanner
@@ -73,7 +70,6 @@ export const LoginPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Corpo Central: Botões de Provedores OU Campos de Login Interno */}
           <div className="my-6">
             {avisoProvedorExterno && !exibirLoginInterno && (
               <div className="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-3.5 py-2.5 text-xs text-amber-800 text-center">
@@ -178,7 +174,6 @@ export const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Rodapé do Card */}
           <footer className="text-center">
             <p className="text-xs text-slate-400">
               © 2026 SarsDev. Todos os direitos reservados.

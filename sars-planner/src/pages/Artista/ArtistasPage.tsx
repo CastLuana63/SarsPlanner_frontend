@@ -18,21 +18,18 @@ export const ArtistasPage: React.FC = () => {
     )
     const [termoBusca, setTermoBusca] = useState<string>('')
 
-    // Estado de ordenação exclusiva: apenas uma coluna pode estar ativa por vez
     const [ordenacaoAtual, setOrdenacaoAtual] =
         useState<IConfiguracaoOrdenacaoArtista>({
             colunaAtiva: 'nome_artista',
             direcao: 'asc',
         })
 
-    // Estados do Modal Lateral (Criar / Editar) e Modal de Exclusão
     const [modalLateralAberto, setModalLateralAberto] = useState<boolean>(false)
     const [artistaEmEdicao, setArtistaEmEdicao] = useState<IArtista | null>(null)
     const [artistaParaExcluir, setArtistaParaExcluir] = useState<IArtista | null>(
         null
     )
 
-    // Alterna ordenação garantindo que ordenar uma coluna desative a outra
     const manipularAlternanciaOrdenacao = (colunaClicada: TColunaOrdenavelArtista) => {
         setOrdenacaoAtual((estadoAnterior) => {
             if (estadoAnterior.colunaAtiva === colunaClicada) {
@@ -41,15 +38,13 @@ export const ArtistasPage: React.FC = () => {
                     direcao: estadoAnterior.direcao === 'asc' ? 'desc' : 'asc',
                 }
             }
-            // Se clicou na outra coluna, ativa a nova em 'asc' e desativa a anterior
             return {
                 colunaAtiva: colunaClicada,
                 direcao: 'asc',
             }
         })
     }
-
-    // Filtra e aplica a ordenação alfabética exclusiva
+    
     const artistasFiltradosEOrdenados = useMemo<IArtista[]>(() => {
         const termoLimpo = termoBusca.trim().toLowerCase()
 
@@ -76,19 +71,16 @@ export const ArtistasPage: React.FC = () => {
         )
     }, [listaArtistas, termoBusca, ordenacaoAtual])
 
-    // Abre modal lateral para criação
     const abrirModalCriacao = () => {
         setArtistaEmEdicao(null)
         setModalLateralAberto(true)
     }
 
-    // Abre modal lateral para edição
     const abrirModalEdicao = (artista: IArtista) => {
         setArtistaEmEdicao(artista)
         setModalLateralAberto(true)
     }
 
-    // Salva novo artista ou atualiza existente
     const manipularSalvarArtista = (dadosFormulario: IDadosFormularioArtista) => {
         if (artistaEmEdicao) {
             setListaArtistas((listaAnterior) =>
@@ -114,7 +106,6 @@ export const ArtistasPage: React.FC = () => {
         setArtistaEmEdicao(null)
     }
 
-    // Confirma exclusão do artista
     const manipularConfirmarExclusao = (idArtista: number) => {
         setListaArtistas((listaAnterior) =>
             listaAnterior.filter((item) => item.id !== idArtista)
@@ -122,7 +113,6 @@ export const ArtistasPage: React.FC = () => {
         setArtistaParaExcluir(null)
     }
 
-    // Exporta a grade atual para planilha CSV (compatível com Excel PT-BR)
     const exportarParaPlanilhaCsv = () => {
         const cabecalhos = [
             'Nome Artista',
@@ -145,7 +135,6 @@ export const ArtistasPage: React.FC = () => {
             ...linhasCsv.map((linha) => linha.join(';')),
         ].join('\r\n')
 
-        // Adiciona BOM (\uFEFF) para acentuação correta no Excel
         const blob = new Blob(['\uFEFF' + conteudoCsv], {
             type: 'text/csv;charset=utf-8;',
         })
@@ -159,25 +148,13 @@ export const ArtistasPage: React.FC = () => {
         URL.revokeObjectURL(urlDownload)
     }
 
-    // Exporta em PDF via impressão limpa do Header + Grade
     const exportarParaPdf = () => {
         window.print()
     }
 
     return (
         <div id="area-impressao-artistas" className="space-y-4">
-            {/* Cabeçalho da Página (Mantido no Print do PDF) */}
             <header className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h1 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
-                        Lista de Artistas
-                    </h1>
-                    <p className="text-xs text-slate-500">
-                        Gerenciamento de artistas, apresentadores, contatos e volume de eventos
-                    </p>
-                </div>
-
-                {/* Botões de Ação e Exportação (Ocultos na folha de impressão do PDF) */}
                 <div className="flex flex-wrap items-center gap-2 print:hidden">
                     <button
                         type="button"
@@ -212,7 +189,6 @@ export const ArtistasPage: React.FC = () => {
                 </div>
             </header>
 
-            {/* Barra de Filtro Rápido e Indicador de Ordenação (Oculta no PDF) */}
             <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200 print:hidden">
                 <div className="relative w-full sm:w-72">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -242,7 +218,6 @@ export const ArtistasPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Tabela Principal de Artistas */}
             <TabelaArtistas
                 listaArtistas={artistasFiltradosEOrdenados}
                 ordenacaoAtual={ordenacaoAtual}
@@ -251,7 +226,6 @@ export const ArtistasPage: React.FC = () => {
                 aoClicarExcluir={(artista) => setArtistaParaExcluir(artista)}
             />
 
-            {/* Modal Lateral (Drawer) de Criação / Edição */}
             <ModalLateralArtista
                 aberto={modalLateralAberto}
                 artistaEmEdicao={artistaEmEdicao}
@@ -262,7 +236,6 @@ export const ArtistasPage: React.FC = () => {
                 aoSalvar={manipularSalvarArtista}
             />
 
-            {/* Modal de Confirmação de Exclusão */}
             <ModalConfirmarExclusaoArtista
                 artistaParaExcluir={artistaParaExcluir}
                 aoCancelar={() => setArtistaParaExcluir(null)}

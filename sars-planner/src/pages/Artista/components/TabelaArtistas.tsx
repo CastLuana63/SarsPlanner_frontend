@@ -52,7 +52,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-500 select-none">
-                            {/* Coluna Ordenável 1: Nome Artista */}
                             <th className="py-3 px-4">
                                 <button
                                     type="button"
@@ -67,8 +66,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                     {renderizarIconeOrdenacao('nome_artista')}
                                 </button>
                             </th>
-
-                            {/* Coluna Ordenável 2: Nome Social */}
                             <th className="py-3 px-4">
                                 <button
                                     type="button"
@@ -83,17 +80,9 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                     {renderizarIconeOrdenacao('nome_social')}
                                 </button>
                             </th>
-
-                            {/* Nova Coluna: E-mail */}
                             <th className="py-3 px-4">E-mail</th>
-
-                            {/* Coluna Original: Telefone */}
                             <th className="py-3 px-4">Telefone</th>
-
-                            {/* Nova Coluna: Quantidade de Eventos */}
                             <th className="py-3 px-4 text-center">Qtd. Eventos</th>
-
-                            {/* Coluna Unificada: Ações (Oculta na impressão PDF) */}
                             <th className="py-3 px-4 text-center w-28 print:hidden">Ações</th>
                         </tr>
                     </thead>
@@ -114,19 +103,16 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                     key={artista.id}
                                     className="hover:bg-slate-50/80 transition-colors"
                                 >
-                                    {/* Nome do Artista */}
                                     <td className="py-2.5 px-4 font-bold text-slate-900">
                                         {artista.nome_artista}
                                     </td>
 
-                                    {/* Nome Social / Sigla */}
                                     <td className="py-2.5 px-4">
                                         <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-blue-50 text-[#1056f5] border border-blue-200/70">
                                             {artista.nome_social}
                                         </span>
                                     </td>
 
-                                    {/* E-mail */}
                                     <td className="py-2.5 px-4 text-slate-600">
                                         {artista.email ? (
                                             <span className="inline-flex items-center gap-1.5">
@@ -138,7 +124,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         )}
                                     </td>
 
-                                    {/* Telefone */}
                                     <td className="py-2.5 px-4 text-slate-600">
                                         {artista.telefone ? (
                                             <span className="inline-flex items-center gap-1.5">
@@ -150,7 +135,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         )}
                                     </td>
 
-                                    {/* Quantidade de Eventos */}
                                     <td className="py-2.5 px-4 text-center">
                                         <span className="inline-flex items-center justify-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
                                             <Calendar className="w-3 h-3 text-[#1056f5] print:hidden" />
@@ -158,10 +142,8 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         </span>
                                     </td>
 
-                                    {/* Ações: Botões Editar e Excluir lado a lado com Hover Tooltip */}
                                     <td className="py-2.5 px-4 text-center print:hidden">
                                         <div className="inline-flex items-center justify-center gap-1.5">
-                                            {/* Botão Editar */}
                                             <div className="relative group">
                                                 <button
                                                     type="button"
@@ -177,7 +159,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                                 </span>
                                             </div>
 
-                                            {/* Botão Deletar */}
                                             <div className="relative group">
                                                 <button
                                                     type="button"
