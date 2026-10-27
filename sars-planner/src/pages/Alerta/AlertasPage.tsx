@@ -16,11 +16,6 @@ export const AlertasPage: React.FC = () => {
         alternarConclusaoAlerta,
     } = useNotificacoes()
 
-    const opcoesArtistas = useMemo<string[]>(() => {
-        const conjunto = new Set<string>(listaAlertas.map((item) => item.artista))
-        return Array.from(conjunto).sort()
-    }, [listaAlertas])
-
     const opcoesAnos = useMemo<string[]>(() => {
         const anoAtual = String(new Date().getFullYear())
         const conjunto = new Set<string>([
@@ -30,29 +25,34 @@ export const AlertasPage: React.FC = () => {
         return Array.from(conjunto).sort((a, b) => b.localeCompare(a))
     }, [listaAlertas])
 
+    const opcoesUfs = useMemo<string[]>(() => {
+        const conjunto = new Set<string>(listaAlertas.map((item) => item.uf))
+        return Array.from(conjunto).sort()
+    }, [listaAlertas])
+
+    const opcoesArtistas = useMemo<string[]>(() => {
+        const conjunto = new Set<string>(listaAlertas.map((item) => item.artista))
+        return Array.from(conjunto).sort()
+    }, [listaAlertas])
+
+    const opcoesCategorias = useMemo<string[]>(() => {
+        const conjunto = new Set<string>(listaAlertas.map((item) => item.categoria))
+        return Array.from(conjunto).sort()
+    }, [listaAlertas])
+
+    const quantidadeFiltrosColunaAtivos = useMemo<number>(() => {
+        let contador = 0
+        if (filtrosAplicados.diasSelecionados.length > 0) contador++
+        if (filtrosAplicados.ufsSelecionadas.length > 0) contador++
+        if (filtrosAplicados.artistasSelecionados.length > 0) contador++
+        if (filtrosAplicados.categoriasSelecionadas.length > 0) contador++
+        return contador
+    }, [filtrosAplicados])
+
     const alertasFiltrados = useMemo<IAlertaNotificacao[]>(() => {
+        const termoGeral = filtrosAplicados.pesquisaGeral.trim().toLowerCase()
+
         return listaAlertas.filter((alerta) => {
-            if (
-                filtrosAplicados.artista !== 'TODOS' &&
-                alerta.artista !== filtrosAplicados.artista
-            ) {
-                return false
-            }
-
-            if (
-                filtrosAplicados.statusConclusao === 'NAO_CONCLUIDO' &&
-                alerta.concluida
-            ) {
-                return false
-            }
-
-            if (
-                filtrosAplicados.statusConclusao === 'CONCLUIDO' &&
-                !alerta.concluida
-            ) {
-                return false
-            }
-
             if (
                 filtrosAplicados.ano !== 'TODOS' &&
                 filtrosAplicados.ano.trim() !== '' &&
@@ -61,44 +61,68 @@ export const AlertasPage: React.FC = () => {
                 return false
             }
 
+            if (filtrosAplicados.meses.length > 0) {
+                const mesAlerta = alerta.mes_referencia.padStart(2, '0')
+                if (!filtrosAplicados.meses.includes(mesAlerta)) {
+                    return false
+                }
+            }
+
             if (
-                filtrosAplicados.mes !== 'TODOS' &&
-                filtrosAplicados.mes.trim() !== '' &&
-                alerta.mes_referencia.padStart(2, '0') !== filtrosAplicados.mes
+                filtrosAplicados.statusConclusao === 'NAO_CONCLUIDO' &&
+                alerta.concluida
+            ) {
+                return false
+            }
+            if (
+                filtrosAplicados.statusConclusao === 'CONCLUIDO' &&
+                !alerta.concluida
             ) {
                 return false
             }
 
-            if (
-                filtrosAplicados.cidade.trim() &&
-                !alerta.cidade
+            if (termoGeral) {
+                const textoConsolidadoCelulas = [
+                    alerta.dia_vencimento,
+                    alerta.data_show,
+                    alerta.cidade_uf,
+                    alerta.artista,
+                    alerta.categoria,
+                    alerta.descricao,
+                    alerta.grupo_mes_ano,
+                ]
+                    .join(' ')
                     .toLowerCase()
-                    .includes(filtrosAplicados.cidade.trim().toLowerCase())
+
+                if (!textoConsolidadoCelulas.includes(termoGeral)) {
+                    return false
+                }
+            }
+
+            if (filtrosAplicados.diasSelecionados.length > 0) {
+                const diaPadronizado = alerta.dia_vencimento.padStart(2, '0')
+                if (!filtrosAplicados.diasSelecionados.includes(diaPadronizado)) {
+                    return false
+                }
+            }
+
+            if (
+                filtrosAplicados.ufsSelecionadas.length > 0 &&
+                !filtrosAplicados.ufsSelecionadas.includes(alerta.uf)
             ) {
                 return false
             }
 
             if (
-                filtrosAplicados.uf.trim() &&
-                alerta.uf.toLowerCase() !== filtrosAplicados.uf.trim().toLowerCase()
+                filtrosAplicados.artistasSelecionados.length > 0 &&
+                !filtrosAplicados.artistasSelecionados.includes(alerta.artista)
             ) {
                 return false
             }
 
             if (
-                filtrosAplicados.categoria.trim() &&
-                !alerta.categoria
-                    .toLowerCase()
-                    .includes(filtrosAplicados.categoria.trim().toLowerCase())
-            ) {
-                return false
-            }
-
-            if (
-                filtrosAplicados.descricao.trim() &&
-                !alerta.descricao
-                    .toLowerCase()
-                    .includes(filtrosAplicados.descricao.trim().toLowerCase())
+                filtrosAplicados.categoriasSelecionadas.length > 0 &&
+                !filtrosAplicados.categoriasSelecionadas.includes(alerta.categoria)
             ) {
                 return false
             }
@@ -165,21 +189,21 @@ export const AlertasPage: React.FC = () => {
     }
 
     return (
-        <div id="area-impressao-alertas" className="space-y-3.5">
+        <div id="area-impressao-alertas" className="space-y-2.5">
             <header className="hidden print:block pb-2 border-b border-slate-200">
-                <h1 className="text-lg font-bold text-slate-900">
+                <h1 className="text-base font-bold text-slate-900">
                     Alertas de Pagamento — SarsPlanner
                 </h1>
-                <p className="text-xs text-slate-500">
+                <p className="text-[11px] text-slate-500">
                     Relatório hierárquico por Mês/Ano ({alertasFiltrados.length} registros)
                 </p>
             </header>
 
             <FiltroAlertas
                 filtros={rascunhoFiltros}
-                opcoesArtistas={opcoesArtistas}
                 opcoesAnos={opcoesAnos}
                 totalFiltrados={alertasFiltrados.length}
+                quantidadeFiltrosColunaAtivos={quantidadeFiltrosColunaAtivos}
                 aoAlterarCampo={atualizarCampoRascunhoFiltro}
                 aoFiltrar={aplicarFiltrosAlertas}
                 aoLimpar={limparFiltrosAlertas}
@@ -189,6 +213,11 @@ export const AlertasPage: React.FC = () => {
 
             <TabelaAlertas
                 alertasFiltrados={alertasFiltrados}
+                filtros={filtrosAplicados}
+                opcoesUfs={opcoesUfs}
+                opcoesArtistas={opcoesArtistas}
+                opcoesCategorias={opcoesCategorias}
+                aoAlterarCampoFiltro={atualizarCampoRascunhoFiltro}
                 aoAlternarConclusao={alternarConclusaoAlerta}
                 aoMarcarComoLido={marcarAlertaComoLido}
             />

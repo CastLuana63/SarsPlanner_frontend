@@ -6,20 +6,22 @@ import type {
     INotificacoesContexto,
 } from '@/types/notificacao.types'
 
-const CHAVE_STORAGE_ALERTAS = '@SarsPlanner:listaAlertas:v2'
-const CHAVE_STORAGE_FILTROS_ALERTAS = '@SarsPlanner:filtrosAlertas:v2'
+const CHAVE_STORAGE_ALERTAS = '@SarsPlanner:listaAlertas:v3'
+const CHAVE_STORAGE_FILTROS_ALERTAS = '@SarsPlanner:filtrosAlertas:v3'
 
 const ANO_ATUAL_PADRAO = String(new Date().getFullYear())
 
 export const FILTROS_ALERTAS_INICIAIS: IFiltrosAlertas = {
-    artista: 'TODOS',
-    statusConclusao: 'NAO_CONCLUIDO',
     ano: ANO_ATUAL_PADRAO,
-    mes: 'TODOS',
-    cidade: '',
-    uf: '',
-    categoria: '',
-    descricao: '',
+    meses: [],
+    statusConclusao: 'NAO_CONCLUIDO',
+    pesquisaGeral: '',
+    diasSelecionados: [],
+    ufsSelecionadas: [],
+    artistasSelecionados: [],
+    categoriasSelecionadas: [],
+    campoOrdenacao: 'data',
+    direcaoOrdenacao: 'desc',
 }
 
 const NotificacoesContext = createContext<INotificacoesContexto | undefined>(undefined)
@@ -43,7 +45,24 @@ export const NotificacoesProvider: React.FC<{ children: React.ReactNode }> = ({
         const filtrosSalvos = localStorage.getItem(CHAVE_STORAGE_FILTROS_ALERTAS)
         if (filtrosSalvos) {
             try {
-                return { ...FILTROS_ALERTAS_INICIAIS, ...JSON.parse(filtrosSalvos) }
+                const parseado = JSON.parse(filtrosSalvos)
+                return {
+                    ...FILTROS_ALERTAS_INICIAIS,
+                    ...parseado,
+                    meses: Array.isArray(parseado.meses) ? parseado.meses : [],
+                    diasSelecionados: Array.isArray(parseado.diasSelecionados)
+                        ? parseado.diasSelecionados
+                        : [],
+                    ufsSelecionadas: Array.isArray(parseado.ufsSelecionadas)
+                        ? parseado.ufsSelecionadas
+                        : [],
+                    artistasSelecionados: Array.isArray(parseado.artistasSelecionados)
+                        ? parseado.artistasSelecionados
+                        : [],
+                    categoriasSelecionadas: Array.isArray(parseado.categoriasSelecionadas)
+                        ? parseado.categoriasSelecionadas
+                        : [],
+                }
             } catch {
                 localStorage.removeItem(CHAVE_STORAGE_FILTROS_ALERTAS)
             }
