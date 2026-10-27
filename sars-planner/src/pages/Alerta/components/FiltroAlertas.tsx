@@ -12,9 +12,25 @@ import type {
     TStatusFiltroConclusao,
 } from '@/types/notificacao.types'
 
+export const OPCOES_MESES_SELECT = [
+    { valor: '01', rotulo: '01 - Janeiro' },
+    { valor: '02', rotulo: '02 - Fevereiro' },
+    { valor: '03', rotulo: '03 - Março' },
+    { valor: '04', rotulo: '04 - Abril' },
+    { valor: '05', rotulo: '05 - Maio' },
+    { valor: '06', rotulo: '06 - Junho' },
+    { valor: '07', rotulo: '07 - Julho' },
+    { valor: '08', rotulo: '08 - Agosto' },
+    { valor: '09', rotulo: '09 - Setembro' },
+    { valor: '10', rotulo: '10 - Outubro' },
+    { valor: '11', rotulo: '11 - Novembro' },
+    { valor: '12', rotulo: '12 - Dezembro' },
+]
+
 interface IFiltroAlertasProps {
     filtros: IFiltrosAlertas
     opcoesArtistas: string[]
+    opcoesAnos: string[]
     totalFiltrados: number
     aoAlterarCampo: <K extends keyof IFiltrosAlertas>(
         campo: K,
@@ -29,6 +45,7 @@ interface IFiltroAlertasProps {
 export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
     filtros,
     opcoesArtistas,
+    opcoesAnos,
     totalFiltrados,
     aoAlterarCampo,
     aoFiltrar,
@@ -38,6 +55,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
 }) => {
     const [menuExportacaoAberto, setMenuExportacaoAberto] = useState<boolean>(false)
     const menuOpcoesRef = useRef<HTMLDivElement>(null)
+    const anoAtualSistema = String(new Date().getFullYear())
 
     useEffect(() => {
         const manipularCliqueFora = (evento: MouseEvent) => {
@@ -57,7 +75,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
         aoFiltrar()
     }
 
-    const classesInputPadraoArtistas =
+    const classesInputPadrao =
         'w-full rounded-lg border border-slate-300 bg-slate-50/50 px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:border-[#1056f5] focus:bg-white focus:outline-none transition-colors'
 
     return (
@@ -68,10 +86,42 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-12 gap-2">
                 <div className="lg:col-span-2">
                     <select
+                        value={filtros.ano}
+                        onChange={(e) => aoAlterarCampo('ano', e.target.value)}
+                        aria-label="Selecionar Ano"
+                        className={classesInputPadrao}
+                    >
+                        <option value="TODOS">Ano: Todos</option>
+                        {opcoesAnos.map((anoItem) => (
+                            <option key={anoItem} value={anoItem}>
+                                Ano: {anoItem} {anoItem === anoAtualSistema ? '(Atual)' : ''}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="lg:col-span-2">
+                    <select
+                        value={filtros.mes}
+                        onChange={(e) => aoAlterarCampo('mes', e.target.value)}
+                        aria-label="Selecionar Mês"
+                        className={classesInputPadrao}
+                    >
+                        <option value="TODOS">Mês: Todos (Jan–Dez)</option>
+                        {OPCOES_MESES_SELECT.map((mesObj) => (
+                            <option key={mesObj.valor} value={mesObj.valor}>
+                                {mesObj.rotulo}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="lg:col-span-2">
+                    <select
                         value={filtros.artista}
                         onChange={(e) => aoAlterarCampo('artista', e.target.value)}
                         aria-label="Selecionar Artista"
-                        className={classesInputPadraoArtistas}
+                        className={classesInputPadrao}
                     >
                         <option value="TODOS">Artista: Todos</option>
                         {opcoesArtistas.map((sigla) => (
@@ -82,7 +132,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     </select>
                 </div>
 
-                <div className="lg:col-span-3">
+                <div className="lg:col-span-2">
                     <select
                         value={filtros.statusConclusao}
                         onChange={(e) =>
@@ -92,7 +142,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                             )
                         }
                         aria-label="Status do Alerta"
-                        className={classesInputPadraoArtistas}
+                        className={classesInputPadrao}
                     >
                         <option value="NAO_CONCLUIDO">Status: Não Concluído</option>
                         <option value="CONCLUIDO">Status: Concluído</option>
@@ -100,35 +150,13 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     </select>
                 </div>
 
-                <div className="lg:col-span-2">
-                    <input
-                        type="text"
-                        placeholder="Ano (Ex: 2025)"
-                        maxLength={4}
-                        value={filtros.ano}
-                        onChange={(e) => aoAlterarCampo('ano', e.target.value)}
-                        className={classesInputPadraoArtistas}
-                    />
-                </div>
-
-                <div className="lg:col-span-1">
-                    <input
-                        type="text"
-                        placeholder="Mês"
-                        maxLength={2}
-                        value={filtros.mes}
-                        onChange={(e) => aoAlterarCampo('mes', e.target.value)}
-                        className={classesInputPadraoArtistas}
-                    />
-                </div>
-
                 <div className="lg:col-span-3">
                     <input
                         type="text"
-                        placeholder="Cidade..."
+                        placeholder="Filtrar por cidade..."
                         value={filtros.cidade}
                         onChange={(e) => aoAlterarCampo('cidade', e.target.value)}
-                        className={classesInputPadraoArtistas}
+                        className={classesInputPadrao}
                     />
                 </div>
 
@@ -139,7 +167,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                         maxLength={2}
                         value={filtros.uf}
                         onChange={(e) => aoAlterarCampo('uf', e.target.value.toUpperCase())}
-                        className={classesInputPadraoArtistas}
+                        className={classesInputPadrao}
                     />
                 </div>
             </div>
@@ -152,7 +180,7 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                             placeholder="Categoria (Ex: PAGAMENTO)"
                             value={filtros.categoria}
                             onChange={(e) => aoAlterarCampo('categoria', e.target.value)}
-                            className={classesInputPadraoArtistas}
+                            className={classesInputPadrao}
                         />
                     </div>
 
@@ -167,9 +195,10 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                         />
                     </div>
                 </div>
+
                 <div className="flex items-center gap-2 ml-auto">
                     <span className="hidden xl:inline-block text-[11px] text-slate-500 mr-1">
-                        Total: <strong className="text-slate-800">{totalFiltrados}</strong>
+                        Registros: <strong className="text-slate-800">{totalFiltrados}</strong>
                     </span>
 
                     <button
@@ -202,6 +231,12 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
 
                         {menuExportacaoAberto && (
                             <div className="absolute right-0 top-10 z-40 w-44 rounded-xl bg-white shadow-lg border border-slate-200 py-1.5">
+                                <div className="px-3 py-1 border-b border-slate-100">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                        Exportar Dados
+                                    </span>
+                                </div>
+
                                 <button
                                     type="button"
                                     onClick={() => {

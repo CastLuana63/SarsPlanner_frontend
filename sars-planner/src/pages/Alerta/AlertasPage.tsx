@@ -21,6 +21,15 @@ export const AlertasPage: React.FC = () => {
         return Array.from(conjunto).sort()
     }, [listaAlertas])
 
+    const opcoesAnos = useMemo<string[]>(() => {
+        const anoAtual = String(new Date().getFullYear())
+        const conjunto = new Set<string>([
+            anoAtual,
+            ...listaAlertas.map((item) => item.ano_referencia),
+        ])
+        return Array.from(conjunto).sort((a, b) => b.localeCompare(a))
+    }, [listaAlertas])
+
     const alertasFiltrados = useMemo<IAlertaNotificacao[]>(() => {
         return listaAlertas.filter((alerta) => {
             if (
@@ -45,17 +54,17 @@ export const AlertasPage: React.FC = () => {
             }
 
             if (
-                filtrosAplicados.ano.trim() &&
-                !alerta.ano_referencia.includes(filtrosAplicados.ano.trim())
+                filtrosAplicados.ano !== 'TODOS' &&
+                filtrosAplicados.ano.trim() !== '' &&
+                alerta.ano_referencia !== filtrosAplicados.ano
             ) {
                 return false
             }
 
             if (
-                filtrosAplicados.mes.trim() &&
-                alerta.mes_referencia !==
-                filtrosAplicados.mes.trim().padStart(2, '0') &&
-                !alerta.mes_referencia.includes(filtrosAplicados.mes.trim())
+                filtrosAplicados.mes !== 'TODOS' &&
+                filtrosAplicados.mes.trim() !== '' &&
+                alerta.mes_referencia.padStart(2, '0') !== filtrosAplicados.mes
             ) {
                 return false
             }
@@ -100,7 +109,8 @@ export const AlertasPage: React.FC = () => {
 
     const exportarParaPlanilhaCsv = () => {
         const cabecalhos = [
-            'Mês/Ano',
+            'Ano',
+            'Mês',
             'Dia Vencimento',
             'Data do Show',
             'Cidade - UF',
@@ -110,7 +120,18 @@ export const AlertasPage: React.FC = () => {
             'Status',
         ]
 
-        const linhasCsv = alertasFiltrados.map((item) => [
+        const alertasOrdenadosExportacao = [...alertasFiltrados].sort((a, b) => {
+            if (a.ano_referencia !== b.ano_referencia) {
+                return b.ano_referencia.localeCompare(a.ano_referencia)
+            }
+            if (a.mes_referencia !== b.mes_referencia) {
+                return Number(a.mes_referencia) - Number(b.mes_referencia)
+            }
+            return b.data_vencimento_iso.localeCompare(a.data_vencimento_iso)
+        })
+
+        const linhasCsv = alertasOrdenadosExportacao.map((item) => [
+            `"${item.ano_referencia}"`,
             `"${item.grupo_mes_ano.replace(/"/g, '""')}"`,
             `"${item.dia_vencimento}"`,
             `"${item.data_show}"`,
@@ -138,26 +159,26 @@ export const AlertasPage: React.FC = () => {
         document.body.removeChild(link)
         URL.revokeObjectURL(urlDownload)
     }
-    
+
     const exportarParaPdf = () => {
         window.print()
     }
 
     return (
-        <div id="area-impressao-alertas" className="space-y-4">
+        <div id="area-impressao-alertas" className="space-y-3.5">
             <header className="hidden print:block pb-2 border-b border-slate-200">
                 <h1 className="text-lg font-bold text-slate-900">
                     Alertas de Pagamento — SarsPlanner
                 </h1>
                 <p className="text-xs text-slate-500">
-                    Relatório de parcelas e pagamentos programados ({alertasFiltrados.length}{' '}
-                    registros)
+                    Relatório hierárquico por Mês/Ano ({alertasFiltrados.length} registros)
                 </p>
             </header>
 
             <FiltroAlertas
                 filtros={rascunhoFiltros}
                 opcoesArtistas={opcoesArtistas}
+                opcoesAnos={opcoesAnos}
                 totalFiltrados={alertasFiltrados.length}
                 aoAlterarCampo={atualizarCampoRascunhoFiltro}
                 aoFiltrar={aplicarFiltrosAlertas}

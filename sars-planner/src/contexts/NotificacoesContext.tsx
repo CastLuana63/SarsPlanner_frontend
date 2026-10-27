@@ -6,14 +6,16 @@ import type {
     INotificacoesContexto,
 } from '@/types/notificacao.types'
 
-const CHAVE_STORAGE_ALERTAS = '@SarsPlanner:listaAlertas'
-const CHAVE_STORAGE_FILTROS_ALERTAS = '@SarsPlanner:filtrosAlertas'
+const CHAVE_STORAGE_ALERTAS = '@SarsPlanner:listaAlertas:v2'
+const CHAVE_STORAGE_FILTROS_ALERTAS = '@SarsPlanner:filtrosAlertas:v2'
+
+const ANO_ATUAL_PADRAO = String(new Date().getFullYear())
 
 export const FILTROS_ALERTAS_INICIAIS: IFiltrosAlertas = {
     artista: 'TODOS',
     statusConclusao: 'NAO_CONCLUIDO',
-    ano: '',
-    mes: '',
+    ano: ANO_ATUAL_PADRAO,
+    mes: 'TODOS',
     cidade: '',
     uf: '',
     categoria: '',
@@ -67,7 +69,8 @@ export const NotificacoesProvider: React.FC<{ children: React.ReactNode }> = ({
         return [...listaAlertas]
             .sort((a, b) => {
                 if (a.concluida !== b.concluida) return a.concluida ? 1 : -1
-                return a.data_vencimento_iso.localeCompare(b.data_vencimento_iso)
+                if (a.lida !== b.lida) return a.lida ? 1 : -1
+                return b.data_vencimento_iso.localeCompare(a.data_vencimento_iso)
             })
             .slice(0, 5)
     }, [listaAlertas])
