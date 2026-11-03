@@ -23,3 +23,23 @@ export interface IConfiguracaoOrdenacaoArtista {
   colunaAtiva: TColunaOrdenavelArtista | null
   direcao: TDirecaoOrdenacao
 }
+
+export type TColunaFiltroArtista =
+  | 'nome_artista'
+  | 'nome_social'
+  | 'email'
+  | 'telefone'
+  | 'quantidade_eventos'
+
+export interface IFiltrosColunaArtista {
+  textoNomeArtista: string
+  textoNomeSocial: string
+  textoEmail: string
+  textoTelefoneNumeros: string
+  textoQuantidadeEventos: string
+  nomesArtistasSelecionados: string[]
+  nomesSociaisSelecionados: string[]
+  emailsSelecionados: string[]
+  telefonesSelecionados: string[]
+  quantidadesEventosSelecionadas: string[]
+}
