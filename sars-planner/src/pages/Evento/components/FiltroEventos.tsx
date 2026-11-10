@@ -104,6 +104,29 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
             className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
         >
             <div className="flex flex-wrap items-center gap-2">
+                <Botao
+                    type="button"
+                    variante="primario"
+                    larguraTotal={false}
+                    iconeEsquerda={<Plus className="w-3.5 h-3.5" />}
+                    onClick={aoAbrirNovoEvento}
+                    className="h-8 text-[11px] py-1 px-3 rounded-lg"
+                >
+                    Novo Evento
+                    <strong className="text-white"> | {totalFiltrados}</strong>
+                </Botao>
+
+                <div className="relative flex-1 min-w-[200px]">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                        type="text"
+                        placeholder="Pesquisar qualquer texto nas células (artista, cidade, vendedor, valor)..."
+                        value={filtros.pesquisaGeral}
+                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
+                        className={`${classeControle} w-full pl-8 pr-2.5`}
+                    />
+                </div>
+
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
@@ -112,7 +135,7 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     <option value="TODOS">Todos os anos</option>
                     {opcoesAnos.map((ano) => (
                         <option key={ano} value={ano}>
-                           {ano === anoAtualSistema ? '(Atual)' : ''} {ano} 
+                            {ano === anoAtualSistema ? '(Atual)' : ''} {ano}
                         </option>
                     ))}
                 </select>
@@ -122,8 +145,8 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                         type="button"
                         onClick={() => setMenuMesesAberto((v) => !v)}
                         className={`${classeControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
-                                ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
-                                : ''
+                            ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
+                            : ''
                             }`}
                     >
                         <span className="truncate">{obterResumoMeses()}</span>
@@ -153,14 +176,14 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                                             type="button"
                                             onClick={() => alternarSelecaoMes(mesObj.valor)}
                                             className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-left text-[11px] transition cursor-pointer ${selecionado
-                                                    ? 'bg-blue-50 text-[#1056f5] font-semibold'
-                                                    : 'text-slate-600 hover:bg-slate-100'
+                                                ? 'bg-blue-50 text-[#1056f5] font-semibold'
+                                                : 'text-slate-600 hover:bg-slate-100'
                                                 }`}
                                         >
                                             <span
                                                 className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionado
-                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                        : 'border-slate-300 bg-white'
+                                                    ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                    : 'border-slate-300 bg-white'
                                                     }`}
                                             >
                                                 {selecionado && (
@@ -188,22 +211,7 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     <option value="REALIZADO">Realizado</option>
                 </select>
 
-                <div className="relative flex-1 min-w-[200px]">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                        type="text"
-                        placeholder="Pesquisar qualquer texto nas células (artista, cidade, vendedor, valor)..."
-                        value={filtros.pesquisaGeral}
-                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
-                        className={`${classeControle} w-full pl-8 pr-2.5`}
-                    />
-                </div>
-
                 <div className="flex items-center gap-1.5 ml-auto">
-                    <span className="hidden xl:inline-block text-[10.5px] text-slate-400 mr-1">
-                        Total: <strong className="text-slate-700">{totalFiltrados}</strong>
-                    </span>
-
                     <button
                         type="submit"
                         className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white px-2.5 text-[11px] font-semibold transition cursor-pointer"
@@ -226,17 +234,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                             </span>
                         )}
                     </button>
-
-                    <Botao
-                        type="button"
-                        variante="primario"
-                        larguraTotal={false}
-                        iconeEsquerda={<Plus className="w-3.5 h-3.5" />}
-                        onClick={aoAbrirNovoEvento}
-                        className="h-8 text-[11px] py-1 px-3 rounded-lg"
-                    >
-                        Novo Evento
-                    </Botao>
 
                     <div ref={menuOpcoesRef} className="relative">
                         <button
