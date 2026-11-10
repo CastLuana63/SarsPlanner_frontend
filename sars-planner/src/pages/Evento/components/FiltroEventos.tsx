@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import {
+    Filter,
     FilterX,
     Plus,
     MoreVertical,
@@ -13,18 +14,19 @@ import { Botao } from '@/components/ui/Botao'
 import { OPCOES_MESES_SELECT } from '@/pages/Alerta/components/FiltroAlertas'
 import type {
     IFiltrosEventos,
-    TFiltroRealizadoEvento,
+    TStatusFiltroRealizado,
 } from '@/types/evento.types'
 
 interface IFiltroEventosProps {
     filtros: IFiltrosEventos
     opcoesAnos: string[]
     totalFiltrados: number
-    quantidadeFiltrosAtivos: number
+    quantidadeFiltrosColunaAtivos: number
     aoAlterarCampo: <K extends keyof IFiltrosEventos>(
         campo: K,
         valor: IFiltrosEventos[K]
     ) => void
+    aoFiltrar: () => void
     aoLimpar: () => void
     aoAbrirNovoEvento: () => void
     aoExportarCsv: () => void
@@ -35,32 +37,32 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
     filtros,
     opcoesAnos,
     totalFiltrados,
-    quantidadeFiltrosAtivos,
+    quantidadeFiltrosColunaAtivos,
     aoAlterarCampo,
+    aoFiltrar,
     aoLimpar,
     aoAbrirNovoEvento,
     aoExportarCsv,
     aoExportarPdf,
 }) => {
-    const [menuMesesAberto, setMenuMesesAberto] = useState<boolean>(false)
-    const [menuExportacaoAberto, setMenuExportacaoAberto] =
-        useState<boolean>(false)
+    const [menuMesesAberto, setMenuMesesAberto] = useState(false)
+    const [menuExportacaoAberto, setMenuExportacaoAberto] = useState(false)
 
     const menuMesesRef = useRef<HTMLDivElement>(null)
     const menuOpcoesRef = useRef<HTMLDivElement>(null)
-    const anoAtual = String(new Date().getFullYear())
+    const anoAtualSistema = String(new Date().getFullYear())
 
     useEffect(() => {
-        const manipularCliqueFora = (evento: MouseEvent) => {
+        const manipularCliqueFora = (e: MouseEvent) => {
             if (
                 menuMesesRef.current &&
-                !menuMesesRef.current.contains(evento.target as Node)
+                !menuMesesRef.current.contains(e.target as Node)
             ) {
                 setMenuMesesAberto(false)
             }
             if (
                 menuOpcoesRef.current &&
-                !menuOpcoesRef.current.contains(evento.target as Node)
+                !menuOpcoesRef.current.contains(e.target as Node)
             ) {
                 setMenuExportacaoAberto(false)
             }
@@ -90,31 +92,38 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
         return `Meses: ${filtros.meses.length} selecionados`
     }
 
-    const classesControle =
+    const classeControle =
         'h-8 rounded-lg border border-slate-300 bg-slate-50/60 px-2.5 text-[11px] font-medium text-slate-700 placeholder:text-slate-400 focus:border-[#1056f5] focus:bg-white focus:outline-none transition-colors'
 
     return (
-        <div className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden">
+        <form
+            onSubmit={(e) => {
+                e.preventDefault()
+                aoFiltrar()
+            }}
+            className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
+        >
             <div className="flex flex-wrap items-center gap-2">
+                {/* 1. Ano */}
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
-                    aria-label="Selecionar Ano"
-                    className={`${classesControle} w-full sm:w-36 cursor-pointer`}
+                    className={`${classeControle} w-full sm:w-36 cursor-pointer`}
                 >
                     <option value="TODOS">Ano: Todos</option>
-                    {opcoesAnos.map((anoItem) => (
-                        <option key={anoItem} value={anoItem}>
-                            Ano: {anoItem} {anoItem === anoAtual ? '(Atual)' : ''}
+                    {opcoesAnos.map((ano) => (
+                        <option key={ano} value={ano}>
+                            Ano: {ano} {ano === anoAtualSistema ? '(Atual)' : ''}
                         </option>
                     ))}
                 </select>
 
+                {/* 2. Multi-Select de Meses */}
                 <div ref={menuMesesRef} className="relative w-full sm:w-48">
                     <button
                         type="button"
-                        onClick={() => setMenuMesesAberto((aberto) => !aberto)}
-                        className={`${classesControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
+                        onClick={() => setMenuMesesAberto((v) => !v)}
+                        className={`${classeControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
                                 ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
                                 : ''
                             }`}
@@ -137,7 +146,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                                     Todos (Limpar)
                                 </button>
                             </div>
-
                             <div className="grid grid-cols-2 gap-1 max-h-56 overflow-y-auto">
                                 {OPCOES_MESES_SELECT.map((mesObj) => {
                                     const selecionado = filtros.meses.includes(mesObj.valor)
@@ -170,37 +178,44 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     )}
                 </div>
 
+                {/* 3. Realizado */}
                 <select
                     value={filtros.realizado}
                     onChange={(e) =>
-                        aoAlterarCampo(
-                            'realizado',
-                            e.target.value as TFiltroRealizadoEvento
-                        )
+                        aoAlterarCampo('realizado', e.target.value as TStatusFiltroRealizado)
                     }
-                    aria-label="Filtrar Realizado"
-                    className={`${classesControle} w-full sm:w-40 cursor-pointer`}
+                    className={`${classeControle} w-full sm:w-40 cursor-pointer`}
                 >
                     <option value="TODOS">Realizado: Todos</option>
                     <option value="NAO_REALIZADO">Não Realizado</option>
                     <option value="REALIZADO">Realizado</option>
                 </select>
 
+                {/* 4. Busca Geral */}
                 <div className="relative flex-1 min-w-[200px]">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
                         type="text"
-                        placeholder="Busca geral na grid (cidade, artista, valor, vendedor, status)..."
+                        placeholder="Pesquisar qualquer texto nas células (artista, cidade, vendedor, valor)..."
                         value={filtros.pesquisaGeral}
                         onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
-                        className={`${classesControle} w-full pl-8 pr-2.5`}
+                        className={`${classeControle} w-full pl-8 pr-2.5`}
                     />
                 </div>
 
+                {/* 5. Ações: Filtrar, Limpar, Novo Evento e 3 Pontos */}
                 <div className="flex items-center gap-1.5 ml-auto">
                     <span className="hidden xl:inline-block text-[10.5px] text-slate-400 mr-1">
                         Total: <strong className="text-slate-700">{totalFiltrados}</strong>
                     </span>
+
+                    <button
+                        type="submit"
+                        className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white px-2.5 text-[11px] font-semibold transition cursor-pointer"
+                    >
+                        <Filter className="w-3 h-3" />
+                        <span>Filtrar</span>
+                    </button>
 
                     <button
                         type="button"
@@ -210,9 +225,9 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     >
                         <FilterX className="w-3 h-3 text-slate-400" />
                         <span>Limpar</span>
-                        {quantidadeFiltrosAtivos > 0 && (
+                        {quantidadeFiltrosColunaAtivos > 0 && (
                             <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-blue-100 text-[#1056f5] text-[9.5px] font-bold">
-                                {quantidadeFiltrosAtivos}
+                                {quantidadeFiltrosColunaAtivos}
                             </span>
                         )}
                     </button>
@@ -231,7 +246,7 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     <div ref={menuOpcoesRef} className="relative">
                         <button
                             type="button"
-                            onClick={() => setMenuExportacaoAberto((aberto) => !aberto)}
+                            onClick={() => setMenuExportacaoAberto((v) => !v)}
                             title="Exportar dados"
                             className="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
                         >
@@ -245,7 +260,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                                         Exportar Dados
                                     </span>
                                 </div>
-
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -257,7 +271,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                                     <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                                     <span>Exportar CSV</span>
                                 </button>
-
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -274,6 +287,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }

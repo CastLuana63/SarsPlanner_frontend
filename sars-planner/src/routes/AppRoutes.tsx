@@ -6,8 +6,10 @@ import { LayoutPrincipal } from '@/components/layout/LayoutPrincipal'
 import { InicioPage } from '@/pages/Inicio/InicioPage'
 import { AgendaPage } from '@/pages/Agenda/AgendaPage'
 import { ArtistasPage } from '@/pages/Artista/ArtistasPage'
-import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 import { AlertasPage } from '@/pages/Alerta/AlertasPage'
+import { EventosPage } from '@/pages/Evento/EventosPage'
+import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
+import { DetalheEventoPage } from '@/pages/Evento/components/DetalheEventoPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { estaAutenticado } = useAutenticacao()
@@ -25,7 +27,9 @@ export const AppRoutes: React.FC = () => {
       <Routes>
         <Route
           path="/login"
-          element={estaAutenticado ? <Navigate to="/inicio" replace /> : <LoginPage />}
+          element={
+            estaAutenticado ? <Navigate to="/inicio" replace /> : <LoginPage />
+          }
         />
 
         <Route
@@ -36,10 +40,8 @@ export const AppRoutes: React.FC = () => {
           }
         >
           <Route path="/inicio" element={<InicioPage />} />
-          <Route
-            path="/eventos"
-            element={<EmDesenvolvimentoPage tituloPagina="Eventos" />}
-          />
+          <Route path="/eventos" element={<EventosPage />} />
+          <Route path="/eventos/:id" element={<DetalheEventoPage />} />
           <Route path="/artistas" element={<ArtistasPage />} />
           <Route
             path="/compartilhar"
@@ -71,7 +73,9 @@ export const AppRoutes: React.FC = () => {
 
         <Route
           path="*"
-          element={<Navigate to={estaAutenticado ? '/inicio' : '/login'} replace />}
+          element={
+            <Navigate to={estaAutenticado ? '/inicio' : '/login'} replace />
+          }
         />
       </Routes>
     </BrowserRouter>

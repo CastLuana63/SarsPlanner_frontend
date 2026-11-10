@@ -1,22 +1,22 @@
 [
   {
     "id": "PENDENTE",
-    "nome": "PENDENTE",
+    "rotulo": "PENDENTE",
     "corHex": "#ef4444"
   },
   {
     "id": "OK",
-    "nome": "OK",
-    "corHex": "#16a34a"
+    "rotulo": "OK",
+    "corHex": "#10b981"
   },
   {
-    "id": "EM_ANALISE",
-    "nome": "EM ANÁLISE",
+    "id": "EM_NEGOCIACAO",
+    "rotulo": "EM NEGOCIAÇÃO",
     "corHex": "#f59e0b"
   },
   {
     "id": "CANCELADO",
-    "nome": "CANCELADO",
-    "corHex": "#64748b"
+    "rotulo": "CANCELADO",
+    "corHex": "#94a3b8"
   }
 ]

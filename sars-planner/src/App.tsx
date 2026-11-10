@@ -1,12 +1,15 @@
 import { AutenticacaoProvider } from '@/contexts/AutenticacaoContext'
 import { NotificacoesProvider } from '@/contexts/NotificacoesContext'
+import { EventosProvider } from '@/contexts/EventosContext'
 import { AppRoutes } from '@/routes/AppRoutes'
 
 export function App() {
   return (
     <AutenticacaoProvider>
       <NotificacoesProvider>
-        <AppRoutes />
+        <EventosProvider>
+          <AppRoutes />
+        </EventosProvider>
       </NotificacoesProvider>
     </AutenticacaoProvider>
   )

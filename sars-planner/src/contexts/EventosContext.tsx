@@ -2,50 +2,68 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import eventosMock from '@/mocks/eventosMock.json'
 import statusEventosMock from '@/mocks/statusEventosMock.json'
 import type {
+    IEvento,
     IEventosContexto,
-    IEventoSistema,
     IFiltrosEventos,
-    IStatusPersonalizadoEvento,
-    TDadosFormularioEvento,
+    IStatusEventoCustom,
 } from '@/types/evento.types'
 
 const CHAVE_STORAGE_EVENTOS = '@SarsPlanner:listaEventos:v1'
-const CHAVE_STORAGE_STATUS_EVENTOS = '@SarsPlanner:statusEventos:v1'
+const CHAVE_STORAGE_STATUS = '@SarsPlanner:statusEventos:v1'
 const CHAVE_STORAGE_FILTROS_EVENTOS = '@SarsPlanner:filtrosEventos:v1'
 
-const ANO_ATUAL_PADRAO = String(new Date().getFullYear())
+export const COORDENADAS_CIDADES_PADRAO: Record<
+    string,
+    { lat: number; lng: number }
+> = {
+    'CAMPO GRANDE': { lat: -20.4697, lng: -54.6201 },
+    GUARULHOS: { lat: -23.4543, lng: -46.5337 },
+    CORUMBÁ: { lat: -19.008, lng: -57.651 },
+    CORUMBA: { lat: -19.008, lng: -57.651 },
+    'CAMPINA DA LAGOA': { lat: -24.5886, lng: -52.8019 },
+    'RIBEIRÃO PRETO': { lat: -21.1704, lng: -47.8103 },
+    'RIBEIRAO PRETO': { lat: -21.1704, lng: -47.8103 },
+    CURITIBA: { lat: -25.4284, lng: -49.2733 },
+    'SÃO PAULO': { lat: -23.5505, lng: -46.6333 },
+    GOIÂNIA: { lat: -16.6869, lng: -49.2648 },
+    UBERLÂNDIA: { lat: -18.9186, lng: -48.2772 },
+    FLORIANÓPOLIS: { lat: -27.5954, lng: -48.548 },
+}
+
+export const obterCoordenadasCidade = (
+    cidade: string,
+    idSemente = 1
+): { latitude: number; longitude: number } => {
+    const chave = cidade.trim().toUpperCase()
+    if (COORDENADAS_CIDADES_PADRAO[chave]) {
+        return {
+            latitude: COORDENADAS_CIDADES_PADRAO[chave].lat,
+            longitude: COORDENADAS_CIDADES_PADRAO[chave].lng,
+        }
+    }
+    const deslocamentoLat = ((idSemente * 17) % 80) * 0.08
+    const deslocamentoLng = ((idSemente * 29) % 80) * 0.08
+    return {
+        latitude: -22.5 + deslocamentoLat,
+        longitude: -49.5 + deslocamentoLng,
+    }
+}
 
 export const FILTROS_EVENTOS_INICIAIS: IFiltrosEventos = {
-    ano: ANO_ATUAL_PADRAO,
+    ano: String(new Date().getFullYear()),
     meses: [],
     realizado: 'TODOS',
     pesquisaGeral: '',
-    artistasSelecionados: [],
     diasSelecionados: [],
     ufsSelecionadas: [],
+    artistasSelecionados: [],
     vendedoresSelecionados: [],
     statusSelecionados: [],
     textoValorShow: '',
     textoComissao: '',
     textoProducao: '',
     campoOrdenacao: 'data',
-    direcaoOrdenacao: 'asc',
-}
-
-export const COORDENADAS_PADRAO_POR_UF: Record<
-    string,
-    { lat: number; lng: number; estado: string }
-> = {
-    SP: { lat: -23.5505, lng: -46.6333, estado: 'São Paulo' },
-    MS: { lat: -20.4697, lng: -54.6201, estado: 'Mato Grosso do Sul' },
-    PR: { lat: -25.4284, lng: -49.2733, estado: 'Paraná' },
-    ES: { lat: -20.3155, lng: -40.3128, estado: 'Espírito Santo' },
-    MG: { lat: -19.9167, lng: -43.9345, estado: 'Minas Gerais' },
-    GO: { lat: -16.6869, lng: -49.2648, estado: 'Goiás' },
-    SC: { lat: -27.5954, lng: -48.548, estado: 'Santa Catarina' },
-    RJ: { lat: -22.9068, lng: -43.1729, estado: 'Rio de Janeiro' },
-    RO: { lat: -8.7619, lng: -63.9039, estado: 'Rondônia' },
-    BA: { lat: -12.9714, lng: -38.5014, estado: 'Bahia' },
+    direcaoOrdenacao: 'desc',
 }
 
 const EventosContext = createContext<IEventosContexto | undefined>(undefined)
@@ -53,121 +71,127 @@ const EventosContext = createContext<IEventosContexto | undefined>(undefined)
 export const EventosProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [listaEventos, setListaEventos] = useState<IEventoSistema[]>(() => {
+    const [listaEventos, setListaEventos] = useState<IEvento[]>(() => {
         const salvo = localStorage.getItem(CHAVE_STORAGE_EVENTOS)
         if (salvo) {
             try {
-                return JSON.parse(salvo) as IEventoSistema[]
+                return JSON.parse(salvo) as IEvento[]
             } catch {
                 localStorage.removeItem(CHAVE_STORAGE_EVENTOS)
             }
         }
-        return eventosMock as IEventoSistema[]
+        return eventosMock as IEvento[]
     })
 
-    const [listaStatus, setListaStatus] = useState<IStatusPersonalizadoEvento[]>(
+    const [listaStatus, setListaStatus] = useState<IStatusEventoCustom[]>(() => {
+        const salvo = localStorage.getItem(CHAVE_STORAGE_STATUS)
+        if (salvo) {
+            try {
+                return JSON.parse(salvo) as IStatusEventoCustom[]
+            } catch {
+                localStorage.removeItem(CHAVE_STORAGE_STATUS)
+            }
+        }
+        return statusEventosMock as IStatusEventoCustom[]
+    })
+
+    const [filtrosAplicados, setFiltrosAplicados] = useState<IFiltrosEventos>(
         () => {
-            const salvo = localStorage.getItem(CHAVE_STORAGE_STATUS_EVENTOS)
+            const salvo = localStorage.getItem(CHAVE_STORAGE_FILTROS_EVENTOS)
             if (salvo) {
                 try {
-                    return JSON.parse(salvo) as IStatusPersonalizadoEvento[]
+                    return { ...FILTROS_EVENTOS_INICIAIS, ...JSON.parse(salvo) }
                 } catch {
-                    localStorage.removeItem(CHAVE_STORAGE_STATUS_EVENTOS)
+                    localStorage.removeItem(CHAVE_STORAGE_FILTROS_EVENTOS)
                 }
             }
-            return statusEventosMock as IStatusPersonalizadoEvento[]
+            return FILTROS_EVENTOS_INICIAIS
         }
     )
 
-    const [filtrosEventos, setFiltrosEventos] = useState<IFiltrosEventos>(() => {
-        const salvo = localStorage.getItem(CHAVE_STORAGE_FILTROS_EVENTOS)
-        if (salvo) {
-            try {
-                return { ...FILTROS_EVENTOS_INICIAIS, ...JSON.parse(salvo) }
-            } catch {
-                localStorage.removeItem(CHAVE_STORAGE_FILTROS_EVENTOS)
-            }
-        }
-        return FILTROS_EVENTOS_INICIAIS
-    })
+    const [rascunhoFiltros, setRascunhoFiltros] =
+        useState<IFiltrosEventos>(filtrosAplicados)
 
     useEffect(() => {
         localStorage.setItem(CHAVE_STORAGE_EVENTOS, JSON.stringify(listaEventos))
     }, [listaEventos])
 
     useEffect(() => {
-        localStorage.setItem(
-            CHAVE_STORAGE_STATUS_EVENTOS,
-            JSON.stringify(listaStatus)
-        )
+        localStorage.setItem(CHAVE_STORAGE_STATUS, JSON.stringify(listaStatus))
     }, [listaStatus])
 
     useEffect(() => {
         localStorage.setItem(
             CHAVE_STORAGE_FILTROS_EVENTOS,
-            JSON.stringify(filtrosEventos)
+            JSON.stringify(filtrosAplicados)
         )
-    }, [filtrosEventos])
+    }, [filtrosAplicados])
 
-    const atualizarCampoFiltroEvento = <K extends keyof IFiltrosEventos>(
+    const atualizarCampoFiltro = <K extends keyof IFiltrosEventos>(
         campo: K,
         valor: IFiltrosEventos[K]
     ) => {
-        setFiltrosEventos((anterior) => ({
-            ...anterior,
-            [campo]: valor,
-        }))
+        setRascunhoFiltros((anterior) => {
+            const atualizado = { ...anterior, [campo]: valor }
+            setFiltrosAplicados(atualizado)
+            return atualizado
+        })
     }
 
-    const limparTodosFiltrosEventos = () => {
-        setFiltrosEventos(FILTROS_EVENTOS_INICIAIS)
+    const aplicarFiltros = () => {
+        setFiltrosAplicados(rascunhoFiltros)
+    }
+
+    const limparFiltros = () => {
+        setRascunhoFiltros(FILTROS_EVENTOS_INICIAIS)
+        setFiltrosAplicados(FILTROS_EVENTOS_INICIAIS)
         localStorage.removeItem(CHAVE_STORAGE_FILTROS_EVENTOS)
     }
 
-    const adicionarEvento = (dados: TDadosFormularioEvento) => {
-        const partesData = dados.data_evento.split('-')
-        const ano_referencia = partesData[0] || ANO_ATUAL_PADRAO
-        const mes_referencia = (partesData[1] || '01').padStart(2, '0')
-        const dia_evento = (partesData[2] || '01').padStart(2, '0')
+    const adicionarEvento = (novo: Omit<IEvento, 'id'>) => {
+        setListaEventos((anterior) => {
+            const novoId =
+                anterior.length > 0 ? Math.max(...anterior.map((e) => e.id)) + 1 : 101
+            const coords =
+                novo.latitude && novo.longitude
+                    ? { latitude: novo.latitude, longitude: novo.longitude }
+                    : obterCoordenadasCidade(novo.cidade, novoId)
 
-        const novoId =
-            listaEventos.length > 0
-                ? Math.max(...listaEventos.map((e) => e.id)) + 1
-                : 101
-
-        const novoEvento: IEventoSistema = {
-            ...dados,
-            id: novoId,
-            dia_evento,
-            mes_referencia,
-            ano_referencia,
-            cidade_uf: `${dados.cidade} - ${dados.uf}`,
-        }
-
-        setListaEventos((anterior) => [...anterior, novoEvento])
+            const registroCompleto: IEvento = {
+                ...novo,
+                id: novoId,
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+            }
+            return [...anterior, registroCompleto]
+        })
     }
 
-    const atualizarEvento = (
-        idEvento: number,
-        dadosParciais: Partial<IEventoSistema>
-    ) => {
+    const atualizarEvento = (id: number, dadosParciais: Partial<IEvento>) => {
         setListaEventos((anterior) =>
-            anterior.map((ev) => {
-                if (ev.id !== idEvento) return ev
-
-                const atualizado: IEventoSistema = { ...ev, ...dadosParciais }
+            anterior.map((item) => {
+                if (item.id !== id) return item
+                const atualizado = { ...item, ...dadosParciais }
 
                 if (dadosParciais.data_evento) {
                     const [ano, mes, dia] = dadosParciais.data_evento.split('-')
-                    if (ano && mes && dia) {
-                        atualizado.ano_referencia = ano
-                        atualizado.mes_referencia = mes.padStart(2, '0')
-                        atualizado.dia_evento = dia.padStart(2, '0')
-                    }
+                    atualizado.ano_referencia = ano || item.ano_referencia
+                    atualizado.mes_referencia = mes || item.mes_referencia
+                    atualizado.dia_evento = dia || item.dia_evento
                 }
 
-                if (dadosParciais.cidade !== undefined || dadosParciais.uf !== undefined) {
-                    atualizado.cidade_uf = `${atualizado.cidade} - ${atualizado.uf}`
+                if (
+                    dadosParciais.cidade !== undefined ||
+                    dadosParciais.uf !== undefined
+                ) {
+                    const cidadeLimpa = (dadosParciais.cidade ?? item.cidade).trim()
+                    const ufLimpa = (dadosParciais.uf ?? item.uf).trim().toUpperCase()
+                    atualizado.cidade = cidadeLimpa
+                    atualizado.uf = ufLimpa
+                    atualizado.cidade_uf = `${cidadeLimpa} - ${ufLimpa}`
+                    const novasCoords = obterCoordenadasCidade(cidadeLimpa, item.id)
+                    atualizado.latitude = novasCoords.latitude
+                    atualizado.longitude = novasCoords.longitude
                 }
 
                 return atualizado
@@ -175,53 +199,25 @@ export const EventosProvider: React.FC<{ children: React.ReactNode }> = ({
         )
     }
 
-    const excluirEvento = (idEvento: number) => {
-        setListaEventos((anterior) => anterior.filter((ev) => ev.id !== idEvento))
+    const excluirEvento = (id: number) => {
+        setListaEventos((anterior) => anterior.filter((item) => item.id !== id))
     }
 
-    const salvarOuAtualizarStatus = (
-        idExistente: string | null,
-        nome: string,
-        corHex: string
-    ): IStatusPersonalizadoEvento => {
-        const nomePadronizado = nome.trim().toUpperCase()
-
-        if (idExistente) {
-            const atualizado: IStatusPersonalizadoEvento = {
-                id: idExistente,
-                nome: nomePadronizado,
-                corHex,
-            }
-            setListaStatus((anterior) =>
-                anterior.map((st) => (st.id === idExistente ? atualizado : st))
-            )
-            return atualizado
-        }
-
-        const novoId = nomePadronizado.replace(/\s+/g, '_')
-        const novoStatus: IStatusPersonalizadoEvento = {
-            id: novoId,
-            nome: nomePadronizado,
-            corHex,
-        }
-
+    const salvarStatusCustom = (novoStatus: IStatusEventoCustom) => {
         setListaStatus((anterior) => {
-            const jaExiste = anterior.some((st) => st.id === novoId)
-            if (jaExiste) {
-                return anterior.map((st) => (st.id === novoId ? novoStatus : st))
+            const existe = anterior.some((s) => s.id === novoStatus.id)
+            if (existe) {
+                return anterior.map((s) => (s.id === novoStatus.id ? novoStatus : s))
             }
             return [...anterior, novoStatus]
         })
-
-        return novoStatus
     }
 
-    const obterStatusPorId = (statusId: string): IStatusPersonalizadoEvento => {
+    const obterStatusPorId = (statusId: string): IStatusEventoCustom => {
         return (
-            listaStatus.find((st) => st.id === statusId) ||
-            listaStatus[0] || {
-                id: 'PENDENTE',
-                nome: 'PENDENTE',
+            listaStatus.find((s) => s.id === statusId) || {
+                id: statusId,
+                rotulo: statusId,
                 corHex: '#ef4444',
             }
         )
@@ -232,13 +228,15 @@ export const EventosProvider: React.FC<{ children: React.ReactNode }> = ({
             value={{
                 listaEventos,
                 listaStatus,
-                filtrosEventos,
-                atualizarCampoFiltroEvento,
-                limparTodosFiltrosEventos,
+                filtrosAplicados,
+                rascunhoFiltros,
+                atualizarCampoFiltro,
+                aplicarFiltros,
+                limparFiltros,
                 adicionarEvento,
                 atualizarEvento,
                 excluirEvento,
-                salvarOuAtualizarStatus,
+                salvarStatusCustom,
                 obterStatusPorId,
             }}
         >
