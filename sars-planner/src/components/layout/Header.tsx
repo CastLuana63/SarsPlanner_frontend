@@ -44,6 +44,7 @@ export const Header: React.FC<IHeaderProps> = ({
 
   const obterTituloPaginaAtual = (): string => {
     if (location.pathname === '/alertas') return 'Alertas de Pagamento'
+    if (location.pathname.startsWith('/eventos/')) return 'Detalhes do Evento'
     if (location.pathname === '/ajuda') return 'Ajuda'
     if (location.pathname === '/configuracoes') return 'Configurações'
 
@@ -100,8 +101,8 @@ export const Header: React.FC<IHeaderProps> = ({
 
   return (
     <header
-      className={`sticky top-0 z-20 h-14 px-4 sm:px-5 flex items-center justify-between shrink-0 transition-all duration-200 ${estaRolando
-          ? 'bg-white/65 backdrop-blur-md border-b border-slate-200/60 shadow-2xs'
+      className={`sticky top-0 z-50 h-14 px-4 sm:px-5 flex items-center justify-between shrink-0 transition-all duration-200 ${estaRolando
+          ? 'bg-white/75 backdrop-blur-md border-b border-slate-200/80 shadow-xs'
           : 'bg-white border-b border-slate-200'
         }`}
     >
@@ -134,9 +135,9 @@ export const Header: React.FC<IHeaderProps> = ({
             </span>
           )}
         </button>
-
+        
         {notificacaoAberta && (
-          <div className="absolute right-10 top-11 z-50 w-80 sm:w-96 rounded-xl bg-white shadow-xl border border-slate-200 overflow-hidden">
+          <div className="absolute right-10 top-11 z-[100] w-80 sm:w-96 rounded-xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
             <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
@@ -157,6 +158,7 @@ export const Header: React.FC<IHeaderProps> = ({
                 <span>Ler todas</span>
               </button>
             </div>
+
             <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
               {cincoAlertasMaisRecentes.length === 0 ? (
                 <p className="text-xs text-slate-500 text-center py-6">
@@ -200,6 +202,7 @@ export const Header: React.FC<IHeaderProps> = ({
                           {alerta.descricao}
                         </p>
                       </div>
+
                       <div
                         className="flex items-center gap-1 shrink-0"
                         onClick={(e) => e.stopPropagation()}
@@ -238,6 +241,7 @@ export const Header: React.FC<IHeaderProps> = ({
                 ))
               )}
             </div>
+
             <div className="px-4 py-2.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
               <span className="text-[11px] text-slate-500">
                 Exibindo {cincoAlertasMaisRecentes.length} de {listaAlertas.length} alertas
@@ -254,6 +258,7 @@ export const Header: React.FC<IHeaderProps> = ({
             </div>
           </div>
         )}
+
         <button
           type="button"
           onClick={alternarMenuUsuario}
@@ -264,7 +269,7 @@ export const Header: React.FC<IHeaderProps> = ({
         </button>
 
         {menuUsuarioAberto && (
-          <div className="absolute right-0 top-11 z-50 w-60 rounded-xl bg-white shadow-lg border border-slate-200 py-1.5">
+          <div className="absolute right-0 top-11 z-[100] w-60 rounded-xl bg-white shadow-2xl border border-slate-200 py-1.5">
             <div className="px-3.5 py-2 border-b border-slate-100">
               <p className="text-xs font-semibold text-slate-900 truncate">
                 {usuarioLogado?.nome || 'Administrador'}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Clock, MapPin } from 'lucide-react'
+import { Route, Clock, MapPin, Eye } from 'lucide-react'
 import type { IDistanciaCidadeEvento, IEvento } from '@/types/evento.types'
 
 interface IPainelCidadesDistanciaProps {
@@ -39,17 +39,20 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                 </div>
 
                 <div>
+                    <label className="block text-[9.5px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                        Selecionar cidade para traçar rota no mapa (1 por vez)
+                    </label>
                     <select
                         value={cidadeSelecionada ? String(cidadeSelecionada.eventoId) : 'TODAS'}
                         onChange={(e) => manipularMudancaSelect(e.target.value)}
                         className="w-full h-8 rounded-lg border border-slate-300 bg-white px-2.5 text-[11px] font-semibold text-slate-800 focus:border-[#1056f5] focus:outline-none cursor-pointer"
                     >
                         <option value="TODAS">
-                            📍 Mostrar todas as cidades (Apenas marcadores)
+                            Mostrar todas as cidades (Apenas marcadores)
                         </option>
                         {cidadesCalculadas.map((cid) => (
                             <option key={cid.eventoId} value={String(cid.eventoId)}>
-                                🚗 Rota: {cid.cidade_uf} → {eventoPrincipal.cidade_uf} (
+                                Rota: {cid.cidade_uf} → {eventoPrincipal.cidade_uf} (
                                 {cid.distanciaKm} km • {cid.tempoEstimadoTexto})
                             </option>
                         ))}
@@ -57,7 +60,7 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                 </div>
             </div>
 
-            <div className="grid grid-cols-12 bg-slate-200/90 border-b border-slate-300 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-slate-700">
+            <div className="grid grid-cols-12 bg-[#1056f5] text-white border-b border-blue-700 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider select-none">
                 <div className="col-span-6">Cidade Origem</div>
                 <div className="col-span-3 text-right">Km</div>
                 <div className="col-span-3 text-right">Tempo</div>
@@ -76,9 +79,9 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                                 key={cid.eventoId}
                                 type="button"
                                 onClick={() => aoSelecionarCidade(ativa ? null : cid)}
-                                className={`w-full grid grid-cols-12 items-center px-3 py-2.5 text-left text-[11px] transition cursor-pointer ${ativa
+                                className={`w-full grid grid-cols-12 items-center px-3 py-2 text-left text-[10.5px] transition cursor-pointer ${ativa
                                         ? 'bg-blue-50/90 border-l-4 border-l-[#1056f5] font-semibold text-[#1056f5]'
-                                        : 'hover:bg-slate-50 text-slate-700'
+                                        : 'hover:bg-blue-50/35 text-slate-700'
                                     }`}
                             >
                                 <div className="col-span-6 pr-2 min-w-0">
@@ -92,7 +95,8 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                                         </span>
                                     </div>
                                     <span className="text-[9.5px] text-slate-400 block pl-4 truncate">
-                                        Show {cid.artista} • {cid.data_evento.split('-').reverse().join('/')}
+                                        Show {cid.artista} •{' '}
+                                        {cid.data_evento.split('-').reverse().join('/')}
                                     </span>
                                 </div>
 
@@ -100,7 +104,7 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                                     {cid.distanciaKm} km
                                 </div>
 
-                                <div className="col-span-3 text-right flex items-center justify-end gap-1 text-[10.5px] text-slate-600">
+                                <div className="col-span-3 text-right flex items-center justify-end gap-1 text-[10px] text-slate-600">
                                     <Clock className="w-2.5 h-2.5 text-slate-400 shrink-0" />
                                     <span>{cid.tempoEstimadoTexto}</span>
                                 </div>
@@ -108,6 +112,13 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                         )
                     })
                 )}
+            </div>
+
+            <div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                <span className="inline-flex items-center gap-1">
+                    <Eye className="w-3 h-3 text-[#1056f5]" />
+                    Clique em uma cidade para traçar ou ocultar a rota
+                </span>
             </div>
         </aside>
     )

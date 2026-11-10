@@ -13,6 +13,11 @@ import {
     Check,
     Search,
 } from 'lucide-react'
+import {
+    ContainerGridPadrao,
+    ESTILOS_PADRAO_GRID,
+    obterClasseBotaoColunaAzul,
+} from '@/components/ui/PadraoGrid'
 import type {
     IArtista,
     IConfiguracaoOrdenacaoArtista,
@@ -98,14 +103,12 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
     const renderizarIconeOrdenacao = (coluna: TColunaOrdenavelArtista) => {
         const estaAtiva = ordenacaoAtual.colunaAtiva === coluna
         if (!estaAtiva) {
-            return (
-                <ArrowUpDown className="w-3 h-3 text-slate-400 group-hover:text-slate-700 transition-colors" />
-            )
+            return <ArrowUpDown className="w-3 h-3 text-white/75" />
         }
         return ordenacaoAtual.direcao === 'asc' ? (
-            <ArrowUp className="w-3 h-3 text-[#1056f5]" />
+            <ArrowUp className="w-3 h-3 text-white" />
         ) : (
-            <ArrowDown className="w-3 h-3 text-[#1056f5]" />
+            <ArrowDown className="w-3 h-3 text-white" />
         )
     }
 
@@ -170,21 +173,21 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
     )
 
     return (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] overflow-visible">
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[780px]">
-                    <thead ref={cabecalhoTabelaRef}>
-                        <tr className="h-8 border-b border-slate-300 bg-slate-200/95 text-[11px] font-bold uppercase tracking-wider text-slate-700 select-none">
+        <ContainerGridPadrao larguraMinimaPx="min-w-[780px]">
+            <div className={ESTILOS_PADRAO_GRID.viewportAlturaFixa}>
+                <table className="w-full text-left border-collapse">
+                    <thead
+                        ref={cabecalhoTabelaRef}
+                        className={ESTILOS_PADRAO_GRID.cabecalhoColunasAzul}
+                    >
+                        <tr>
                             <th className="relative py-1 px-2.5">
                                 <div className="flex items-center justify-between gap-1">
                                     <button
                                         type="button"
                                         onClick={() => aoAlternarOrdenacao('nome_artista')}
                                         title="Ordenar por Nome do Artista"
-                                        className={`group inline-flex items-center gap-1 font-bold uppercase tracking-wider cursor-pointer transition-colors ${ordenacaoAtual.colunaAtiva === 'nome_artista'
-                                                ? 'text-[#1056f5]'
-                                                : 'text-slate-700 hover:text-slate-900'
-                                            }`}
+                                        className="inline-flex items-center gap-1 font-bold uppercase tracking-wider cursor-pointer hover:underline"
                                     >
                                         <span>Nome Artista</span>
                                         {renderizarIconeOrdenacao('nome_artista')}
@@ -194,10 +197,9 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         type="button"
                                         onClick={() => alternarDropdownColuna('nome_artista')}
                                         title="Filtrar Nome do Artista"
-                                        className={`inline-flex items-center gap-0.5 rounded px-1 py-0.5 transition cursor-pointer ${colunaPossuiFiltroAtivo('nome_artista')
-                                                ? 'bg-[#1056f5] text-white'
-                                                : 'hover:bg-slate-300/70 text-slate-600'
-                                            }`}
+                                        className={obterClasseBotaoColunaAzul(
+                                            colunaPossuiFiltroAtivo('nome_artista')
+                                        )}
                                     >
                                         <Filter className="w-2.5 h-2.5" />
                                         <ChevronDown className="w-3 h-3" />
@@ -205,7 +207,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 </div>
 
                                 {dropdownAberto === 'nome_artista' && (
-                                    <div className="absolute left-0 top-8 z-50 w-60 rounded-xl bg-white shadow-xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
+                                    <div className="absolute left-0 top-8 z-40 w-60 rounded-xl bg-white text-slate-700 shadow-2xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                                                 Filtrar Nome Artista
@@ -291,10 +293,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         type="button"
                                         onClick={() => aoAlternarOrdenacao('nome_social')}
                                         title="Ordenar por Nome Social"
-                                        className={`group inline-flex items-center gap-1 font-bold uppercase tracking-wider cursor-pointer transition-colors ${ordenacaoAtual.colunaAtiva === 'nome_social'
-                                                ? 'text-[#1056f5]'
-                                                : 'text-slate-700 hover:text-slate-900'
-                                            }`}
+                                        className="inline-flex items-center gap-1 font-bold uppercase tracking-wider cursor-pointer hover:underline"
                                     >
                                         <span>Nome Social</span>
                                         {renderizarIconeOrdenacao('nome_social')}
@@ -304,10 +303,9 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                         type="button"
                                         onClick={() => alternarDropdownColuna('nome_social')}
                                         title="Filtrar Nome Social"
-                                        className={`inline-flex items-center gap-0.5 rounded px-1 py-0.5 transition cursor-pointer ${colunaPossuiFiltroAtivo('nome_social')
-                                                ? 'bg-[#1056f5] text-white'
-                                                : 'hover:bg-slate-300/70 text-slate-600'
-                                            }`}
+                                        className={obterClasseBotaoColunaAzul(
+                                            colunaPossuiFiltroAtivo('nome_social')
+                                        )}
                                     >
                                         <Filter className="w-2.5 h-2.5" />
                                         <ChevronDown className="w-3 h-3" />
@@ -315,7 +313,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 </div>
 
                                 {dropdownAberto === 'nome_social' && (
-                                    <div className="absolute left-0 top-8 z-50 w-52 rounded-xl bg-white shadow-xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
+                                    <div className="absolute left-0 top-8 z-40 w-52 rounded-xl bg-white text-slate-700 shadow-2xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                                                 Filtrar Nome Social
@@ -399,10 +397,9 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => alternarDropdownColuna('email')}
-                                    className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider transition cursor-pointer ${colunaPossuiFiltroAtivo('email')
-                                            ? 'bg-[#1056f5] text-white'
-                                            : 'hover:bg-slate-300/70 text-slate-700'
-                                        }`}
+                                    className={obterClasseBotaoColunaAzul(
+                                        colunaPossuiFiltroAtivo('email')
+                                    )}
                                 >
                                     <span>E-mail</span>
                                     <Filter className="w-2.5 h-2.5 opacity-80" />
@@ -410,7 +407,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 </button>
 
                                 {dropdownAberto === 'email' && (
-                                    <div className="absolute left-0 top-8 z-50 w-64 rounded-xl bg-white shadow-xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
+                                    <div className="absolute left-0 top-8 z-40 w-64 rounded-xl bg-white text-slate-700 shadow-2xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                                                 Filtrar E-mail
@@ -487,10 +484,9 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 <button
                                     type="button"
                                     onClick={() => alternarDropdownColuna('telefone')}
-                                    className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider transition cursor-pointer ${colunaPossuiFiltroAtivo('telefone')
-                                            ? 'bg-[#1056f5] text-white'
-                                            : 'hover:bg-slate-300/70 text-slate-700'
-                                        }`}
+                                    className={obterClasseBotaoColunaAzul(
+                                        colunaPossuiFiltroAtivo('telefone')
+                                    )}
                                 >
                                     <span>Telefone</span>
                                     <Filter className="w-2.5 h-2.5 opacity-80" />
@@ -498,7 +494,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 </button>
 
                                 {dropdownAberto === 'telefone' && (
-                                    <div className="absolute left-0 top-8 z-50 w-60 rounded-xl bg-white shadow-xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
+                                    <div className="absolute left-0 top-8 z-40 w-60 rounded-xl bg-white text-slate-700 shadow-2xl border border-slate-200 p-2.5 font-normal normal-case tracking-normal space-y-2">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                                                 Filtrar Telefone (Números)
@@ -576,15 +572,13 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                     </div>
                                 )}
                             </th>
-
                             <th className="relative py-1 px-2.5 text-center w-36">
                                 <button
                                     type="button"
                                     onClick={() => alternarDropdownColuna('quantidade_eventos')}
-                                    className={`inline-flex items-center justify-center gap-1 rounded px-1.5 py-0.5 font-bold uppercase tracking-wider transition cursor-pointer ${colunaPossuiFiltroAtivo('quantidade_eventos')
-                                            ? 'bg-[#1056f5] text-white'
-                                            : 'hover:bg-slate-300/70 text-slate-700'
-                                        }`}
+                                    className={obterClasseBotaoColunaAzul(
+                                        colunaPossuiFiltroAtivo('quantidade_eventos')
+                                    )}
                                 >
                                     <span>Qtd. Eventos</span>
                                     <Filter className="w-2.5 h-2.5 opacity-80" />
@@ -592,7 +586,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                                 </button>
 
                                 {dropdownAberto === 'quantidade_eventos' && (
-                                    <div className="absolute right-0 top-8 z-50 w-52 rounded-xl bg-white shadow-xl border border-slate-200 p-2.5 text-left font-normal normal-case tracking-normal space-y-2">
+                                    <div className="absolute right-0 top-8 z-40 w-52 rounded-xl bg-white text-slate-700 shadow-2xl border border-slate-200 p-2.5 text-left font-normal normal-case tracking-normal space-y-2">
                                         <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                                             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                                                 Filtrar Qtd. Eventos
@@ -684,7 +678,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                             <tr>
                                 <td
                                     colSpan={6}
-                                    className="py-6 px-4 text-center text-[11px] text-slate-400"
+                                    className="py-12 px-4 text-center text-[11px] text-slate-400"
                                 >
                                     Nenhum artista ou apresentador encontrado para os filtros aplicados.
                                 </td>
@@ -693,7 +687,7 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                             listaArtistas.map((artista) => (
                                 <tr
                                     key={artista.id}
-                                    className="hover:bg-slate-50/90 transition-colors"
+                                    className="hover:bg-blue-50/35 transition-colors"
                                 >
                                     <td className="py-1.5 px-2.5 font-semibold text-slate-800">
                                         {artista.nome_artista}
@@ -775,6 +769,6 @@ export const TabelaArtistas: React.FC<ITabelaArtistasProps> = ({
                     </tbody>
                 </table>
             </div>
-        </div>
+        </ContainerGridPadrao>
     )
 }

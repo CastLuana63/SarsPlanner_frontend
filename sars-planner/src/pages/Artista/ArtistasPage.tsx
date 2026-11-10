@@ -431,16 +431,6 @@ export const ArtistasPage: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-1.5 ml-auto">
                     <div className="hidden xl:flex items-center gap-2 text-[10.5px] text-slate-500 mr-1">
                         <span>
-                            Ordenado por:{' '}
-                            <strong className="text-slate-700">
-                                {ordenacaoAtual.colunaAtiva === 'nome_artista'
-                                    ? 'Nome Artista'
-                                    : 'Nome Social'}{' '}
-                                ({ordenacaoAtual.direcao === 'asc' ? 'A–Z' : 'Z–A'})
-                            </strong>
-                        </span>
-                        <span className="text-slate-300">|</span>
-                        <span>
                             Total:{' '}
                             <strong className="text-slate-700">
                                 {artistasFiltradosEOrdenados.length}
