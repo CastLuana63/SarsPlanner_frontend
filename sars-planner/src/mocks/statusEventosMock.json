@@ -1,0 +1,22 @@
+[
+  {
+    "id": "PENDENTE",
+    "nome": "PENDENTE",
+    "corHex": "#ef4444"
+  },
+  {
+    "id": "OK",
+    "nome": "OK",
+    "corHex": "#16a34a"
+  },
+  {
+    "id": "EM_ANALISE",
+    "nome": "EM ANÁLISE",
+    "corHex": "#f59e0b"
+  },
+  {
+    "id": "CANCELADO",
+    "nome": "CANCELADO",
+    "corHex": "#64748b"
+  }
+]
