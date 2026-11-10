@@ -104,21 +104,19 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
             className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
         >
             <div className="flex flex-wrap items-center gap-2">
-                {/* 1. Ano */}
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
                     className={`${classeControle} w-full sm:w-36 cursor-pointer`}
                 >
-                    <option value="TODOS">Ano: Todos</option>
+                    <option value="TODOS">Todos os anos</option>
                     {opcoesAnos.map((ano) => (
                         <option key={ano} value={ano}>
-                            Ano: {ano} {ano === anoAtualSistema ? '(Atual)' : ''}
+                           {ano === anoAtualSistema ? '(Atual)' : ''} {ano} 
                         </option>
                     ))}
                 </select>
 
-                {/* 2. Multi-Select de Meses */}
                 <div ref={menuMesesRef} className="relative w-full sm:w-48">
                     <button
                         type="button"
@@ -178,7 +176,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     )}
                 </div>
 
-                {/* 3. Realizado */}
                 <select
                     value={filtros.realizado}
                     onChange={(e) =>
@@ -191,7 +188,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     <option value="REALIZADO">Realizado</option>
                 </select>
 
-                {/* 4. Busca Geral */}
                 <div className="relative flex-1 min-w-[200px]">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
@@ -203,7 +199,6 @@ export const FiltroEventos: React.FC<IFiltroEventosProps> = ({
                     />
                 </div>
 
-                {/* 5. Ações: Filtrar, Limpar, Novo Evento e 3 Pontos */}
                 <div className="flex items-center gap-1.5 ml-auto">
                     <span className="hidden xl:inline-block text-[10.5px] text-slate-400 mr-1">
                         Total: <strong className="text-slate-700">{totalFiltrados}</strong>

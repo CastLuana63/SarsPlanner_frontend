@@ -116,7 +116,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
             className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
         >
             <div className="flex flex-wrap items-center gap-2">
-                {/* 1. Select de Ano */}
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
@@ -126,19 +125,18 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     <option value="TODOS">Ano: Todos</option>
                     {opcoesAnos.map((anoItem) => (
                         <option key={anoItem} value={anoItem}>
-                            Ano: {anoItem} {anoItem === anoAtualSistema ? '(Atual)' : ''}
+                            {anoItem} {anoItem === anoAtualSistema ? '(Atual)' : ''}
                         </option>
                     ))}
                 </select>
 
-                {/* 2. Multi-Select de Meses (Permite selecionar mais de um mês) */}
                 <div ref={menuMesesRef} className="relative w-full sm:w-48">
                     <button
                         type="button"
                         onClick={() => setMenuMesesAberto((aberto) => !aberto)}
                         className={`${classesControleCompacto} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
-                                ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
-                                : ''
+                            ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
+                            : ''
                             }`}
                     >
                         <span className="truncate">{obterResumoMesesSelecionados()}</span>
@@ -169,14 +167,14 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                                             type="button"
                                             onClick={() => alternarSelecaoMes(mesObj.valor)}
                                             className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-left text-[11px] transition cursor-pointer ${selecionado
-                                                    ? 'bg-blue-50 text-[#1056f5] font-semibold'
-                                                    : 'text-slate-600 hover:bg-slate-100'
+                                                ? 'bg-blue-50 text-[#1056f5] font-semibold'
+                                                : 'text-slate-600 hover:bg-slate-100'
                                                 }`}
                                         >
                                             <span
                                                 className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionado
-                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                        : 'border-slate-300 bg-white'
+                                                    ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                    : 'border-slate-300 bg-white'
                                                     }`}
                                             >
                                                 {selecionado && <Check className="w-2.5 h-2.5 stroke-[3]" />}
@@ -190,7 +188,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     )}
                 </div>
 
-                {/* 3. Select de Status */}
                 <select
                     value={filtros.statusConclusao}
                     onChange={(e) =>
@@ -207,7 +204,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     <option value="TODOS">Status: Todos</option>
                 </select>
 
-                {/* 4. Pesquisa Geral (Qualquer texto presente nas células) */}
                 <div className="relative flex-1 min-w-[200px]">
                     <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
@@ -219,7 +215,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                     />
                 </div>
 
-                {/* 5. Botões de Ação: Filtrar, Limpar (Todos) e 3 Pontos (Exportar) */}
                 <div className="flex items-center gap-1.5 ml-auto">
                     <span className="hidden xl:inline-block text-[10.5px] text-slate-400 mr-1">
                         Total: <strong className="text-slate-700">{totalFiltrados}</strong>
@@ -248,7 +243,6 @@ export const FiltroAlertas: React.FC<IFiltroAlertasProps> = ({
                         )}
                     </button>
 
-                    {/* Botão de 3 Pontos (Exportação CSV e PDF) */}
                     <div ref={menuOpcoesRef} className="relative">
                         <button
                             type="button"
