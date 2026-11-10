@@ -29,7 +29,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
         Boolean(window.L)
     )
 
-    // Carrega o Leaflet CSS e JS gratuitos via CDN para não exigir pacotes extras
     useEffect(() => {
         if (window.L) {
             setLeafletPronto(true)
@@ -58,7 +57,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
         document.body.appendChild(script)
     }, [])
 
-    // Inicializa o mapa base
     useEffect(() => {
         if (!leafletPronto || !containerMapaRef.current || instanciaMapaRef.current)
             return
@@ -85,7 +83,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
         }
     }, [leafletPronto])
 
-    // Atualiza os Pinos (Verde = Cidade Principal, Vermelhos = Outras Cidades) e a Linha da Rota (1 por 1)
     useEffect(() => {
         if (!leafletPronto || !instanciaMapaRef.current) return
 
@@ -97,7 +94,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
         grupoMarcadores.clearLayers()
         grupoRota.clearLayers()
 
-        // Ícone Pino Verde (Cidade Principal do Evento)
         const iconeVerdePrincipal = L.divIcon({
             className: '',
             html: `<div style="display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9999px;background:#10b981;border:3px solid #ffffff;box-shadow:0 3px 10px rgba(0,0,0,0.35);color:#fff;font-weight:800;font-size:11px;">★</div>`,
@@ -117,7 +113,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
             [eventoPrincipal.latitude, eventoPrincipal.longitude],
         ]
 
-        // Pinos Vermelhos para todas as outras cidades com evento cadastrado
         cidadesSecundarias.forEach((cid) => {
             const estaSelecionada =
                 cidadeRotaSelecionada?.eventoId === cid.eventoId
@@ -149,7 +144,7 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
             }
         })
 
-        // Se houver UMA cidade selecionada, traça a rota mais rápida até a Cidade Principal
+        // Se houver UMA cidade selecionada, traça a rota mais rápida até a Cidade Principal (cidade do evento)
         if (cidadeRotaSelecionada) {
             const origem = cidadeRotaSelecionada
             const destino = eventoPrincipal
@@ -210,7 +205,6 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
 
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] overflow-hidden flex flex-col h-[410px]">
-            {/* Cabeçalho do Mapa */}
             <div className="px-3.5 py-2 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                     <Navigation className="w-3.5 h-3.5 text-[#1056f5]" />
@@ -219,11 +213,10 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
                     </span>
                 </div>
 
-                {/* Legenda dos Pinos */}
                 <div className="flex items-center gap-3 text-[10.5px] font-semibold text-slate-600">
                     <span className="inline-flex items-center gap-1">
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
-                        Principal ({eventoPrincipal.cidade})
+                        Principal
                     </span>
                     <span className="inline-flex items-center gap-1">
                         <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
@@ -243,11 +236,9 @@ export const MapaRotasEvento: React.FC<IMapaRotasEventoProps> = ({
                 </div>
             </div>
 
-            {/* Container do Mapa */}
             <div className="relative flex-1 w-full bg-slate-100">
                 <div ref={containerMapaRef} className="w-full h-full z-10" />
 
-                {/* Banner flutuante quando uma rota 1-a-1 está ativa */}
                 {cidadeRotaSelecionada && (
                     <div className="absolute bottom-3 left-3 z-20 rounded-xl bg-slate-900/90 backdrop-blur-xs text-white px-3.5 py-2 shadow-lg border border-slate-700 text-[11px] flex items-center gap-3">
                         <div>
