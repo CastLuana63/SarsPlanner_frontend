@@ -245,17 +245,10 @@ export const TabelaEventos: React.FC<ITabelaEventosProps> = ({
 
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] overflow-visible">
-            {/* Barra auxiliar superior */}
             <div className="px-3.5 py-1.5 bg-slate-50 border-b border-slate-200 rounded-t-xl flex flex-wrap items-center justify-between gap-2 print:hidden">
                 <div className="flex items-center gap-2 text-[10.5px] text-slate-500">
                     <span className="font-semibold text-slate-600">
-                        Lista de Eventos ({eventosFiltrados.length})
-                    </span>
-                    <span>•</span>
-                    <span>
-                        Dica: dê <strong>2 cliques na bolinha de status</strong> para criar
-                        ou alterar a cor do status, ou clique no <strong>ícone de mapa</strong>{' '}
-                        para ver detalhes e rotas.
+                        Lista de Eventos • ({eventosFiltrados.length})
                     </span>
                 </div>
 
