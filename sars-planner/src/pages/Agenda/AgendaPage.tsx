@@ -131,15 +131,6 @@ export const AgendaPage: React.FC = () => {
     return (
         <div className="space-y-3.5">
             <header className="flex flex-wrap items-center justify-between gap-2">
-                <div>
-                    <h1 className="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
-                        Agenda de Eventos
-                    </h1>
-                    <p className="text-xs text-slate-500">
-                        Sincronizada em tempo real com os eventos cadastrados
-                    </p>
-                </div>
-
                 <div className="flex items-center gap-3 text-[11px] font-medium text-slate-600 bg-white px-3 py-1.5 rounded-lg border border-slate-200">
                     <span className="inline-flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-[#1056f5]" />
