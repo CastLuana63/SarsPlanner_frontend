@@ -102,7 +102,19 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
             className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
         >
             <div className="flex flex-wrap items-center gap-2">
-                {/* 1. Ano */}
+                <span className="hidden xl:inline-block text-[12.5px] text-slate-400 mr-1">
+                    <strong className="text-[#1056f5]">{totalFiltrados}</strong>
+                </span>
+                <div className="relative flex-1 min-w-[200px]">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                        type="text"
+                        placeholder="Pesquisa geral (cidade, UF, artista, contato, valores)..."
+                        value={filtros.pesquisaGeral}
+                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
+                        className={`${classeControle} w-full pl-8 pr-2.5`}
+                    />
+                </div>
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
@@ -116,14 +128,13 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                     ))}
                 </select>
 
-                {/* 2. Multi-Select de Meses */}
                 <div ref={menuMesesRef} className="relative w-full sm:w-48">
                     <button
                         type="button"
                         onClick={() => setMenuMesesAberto((v) => !v)}
                         className={`${classeControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
-                                ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
-                                : ''
+                            ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
+                            : ''
                             }`}
                     >
                         <span className="truncate">{obterResumoMeses()}</span>
@@ -153,14 +164,14 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                                             type="button"
                                             onClick={() => alternarSelecaoMes(mesObj.valor)}
                                             className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-left text-[11px] transition cursor-pointer ${selecionado
-                                                    ? 'bg-blue-50 text-[#1056f5] font-semibold'
-                                                    : 'text-slate-600 hover:bg-slate-100'
+                                                ? 'bg-blue-50 text-[#1056f5] font-semibold'
+                                                : 'text-slate-600 hover:bg-slate-100'
                                                 }`}
                                         >
                                             <span
                                                 className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionado
-                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                        : 'border-slate-300 bg-white'
+                                                    ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                    : 'border-slate-300 bg-white'
                                                     }`}
                                             >
                                                 {selecionado && (
@@ -176,7 +187,6 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                     )}
                 </div>
 
-                {/* 3. Status de Quitação */}
                 <select
                     value={filtros.statusQuitacao}
                     onChange={(e) =>
@@ -193,24 +203,7 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                     <option value="SEM_LANCAMENTO">Sem Parcelas</option>
                 </select>
 
-                {/* 4. Pesquisa Generalista */}
-                <div className="relative flex-1 min-w-[200px]">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                        type="text"
-                        placeholder="Pesquisa geral (cidade, UF, artista, contato, valores)..."
-                        value={filtros.pesquisaGeral}
-                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
-                        className={`${classeControle} w-full pl-8 pr-2.5`}
-                    />
-                </div>
-
-                {/* 5. Botões: Filtrar, Limpar, PDF rápido e Menu 3 Pontos */}
                 <div className="flex items-center gap-1.5 ml-auto">
-                    <span className="hidden xl:inline-block text-[10.5px] text-slate-400 mr-1">
-                        Eventos: <strong className="text-slate-700">{totalFiltrados}</strong>
-                    </span>
-
                     <button
                         type="submit"
                         className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-[#1056f5] hover:bg-blue-700 text-white px-2.5 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
@@ -234,16 +227,6 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                         )}
                     </button>
 
-                    <button
-                        type="button"
-                        onClick={aoExportarPdf}
-                        title="Exportar relatório completo da grid em PDF (abre todos os subitens)"
-                        className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-[#2b4c7e] hover:bg-[#1e3a63] text-white px-2.5 text-[11px] font-semibold transition cursor-pointer"
-                    >
-                        <Printer className="w-3.5 h-3.5" />
-                        <span>PDF</span>
-                    </button>
-
                     <div ref={menuOpcoesRef} className="relative">
                         <button
                             type="button"
@@ -265,6 +248,17 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                                     type="button"
                                     onClick={() => {
                                         setMenuExportacaoAberto(false)
+                                        aoExportarPdf()
+                                    }}
+                                    className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
+                                >
+                                    <Printer className="w-3.5 h-3.5 text-[#1056f5] shrink-0" />
+                                    <span>Exportar PDF</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMenuExportacaoAberto(false)
                                         aoExportarCsv()
                                     }}
                                     className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
@@ -282,17 +276,6 @@ export const FiltroFinanceiro: React.FC<IFiltroFinanceiroProps> = ({
                                 >
                                     <FileSpreadsheet className="w-3.5 h-3.5 text-teal-600 shrink-0" />
                                     <span>Exportar Excel (.xls)</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMenuExportacaoAberto(false)
-                                        aoExportarPdf()
-                                    }}
-                                    className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
-                                >
-                                    <Printer className="w-3.5 h-3.5 text-[#1056f5] shrink-0" />
-                                    <span>Exportar PDF (Completo)</span>
                                 </button>
                             </div>
                         )}
