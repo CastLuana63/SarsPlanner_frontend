@@ -9,9 +9,14 @@ import {
     ChevronDown,
     Check,
     SlidersHorizontal,
+    BookmarkCheck,
+    Trash2,
 } from 'lucide-react'
 import { OPCOES_MESES_SELECT } from '@/pages/Alerta/components/FiltroAlertas'
-import type { IFiltrosCompartilhar } from '@/types/compartilhar.types'
+import type {
+    IFiltroColunasSalvo,
+    IFiltrosCompartilhar,
+} from '@/types/compartilhar.types'
 
 interface IFiltroCompartilharProps {
     filtros: IFiltrosCompartilhar
@@ -21,8 +26,11 @@ interface IFiltroCompartilharProps {
     totalFiltrados: number
     totalColunasSelecionadas: number
     quantidadeFiltrosColunaAtivos: number
-    seletorColunasAberto: boolean
-    aoAlternarSeletorColunas: () => void
+    filtrosSalvos: IFiltroColunasSalvo[]
+    filtroSalvoAtivoId: string | null
+    aoSelecionarFiltroSalvo: (filtroSalvo: IFiltroColunasSalvo) => void
+    aoExcluirFiltroSalvo: (idFiltroSalvo: string) => void
+    aoAbrirModalColunas: () => void
     aoAlterarCampo: <K extends keyof IFiltrosCompartilhar>(
         campo: K,
         valor: IFiltrosCompartilhar[K]
@@ -42,8 +50,11 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
     totalFiltrados,
     totalColunasSelecionadas,
     quantidadeFiltrosColunaAtivos,
-    seletorColunasAberto,
-    aoAlternarSeletorColunas,
+    filtrosSalvos,
+    filtroSalvoAtivoId,
+    aoSelecionarFiltroSalvo,
+    aoExcluirFiltroSalvo,
+    aoAbrirModalColunas,
     aoAlterarCampo,
     aoFiltrar,
     aoLimpar,
@@ -52,9 +63,11 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
     aoExportarPdf,
 }) => {
     const [menuMesesAberto, setMenuMesesAberto] = useState(false)
+    const [menuFiltrosSalvosAberto, setMenuFiltrosSalvosAberto] = useState(false)
     const [menuExportacaoAberto, setMenuExportacaoAberto] = useState(false)
 
     const menuMesesRef = useRef<HTMLDivElement>(null)
+    const menuFiltrosSalvosRef = useRef<HTMLDivElement>(null)
     const menuOpcoesRef = useRef<HTMLDivElement>(null)
     const anoAtualSistema = String(new Date().getFullYear())
 
@@ -65,6 +78,12 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                 !menuMesesRef.current.contains(e.target as Node)
             ) {
                 setMenuMesesAberto(false)
+            }
+            if (
+                menuFiltrosSalvosRef.current &&
+                !menuFiltrosSalvosRef.current.contains(e.target as Node)
+            ) {
+                setMenuFiltrosSalvosAberto(false)
             }
             if (
                 menuOpcoesRef.current &&
@@ -98,6 +117,10 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
         return `Meses: ${filtros.meses.length} selecionados`
     }
 
+    const filtroSalvoAtual = filtrosSalvos.find(
+        (f) => f.id === filtroSalvoAtivoId
+    )
+
     const classeControle =
         'h-8 rounded-lg border border-slate-300 bg-slate-50/60 px-2.5 text-[11px] font-medium text-slate-700 placeholder:text-slate-400 focus:border-[#1056f5] focus:bg-white focus:outline-none transition-colors'
 
@@ -110,30 +133,6 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
             className="bg-white p-2.5 rounded-xl border border-slate-200 shadow-[0_1px_6px_rgba(15,23,42,0.02)] print:hidden"
         >
             <div className="flex flex-wrap items-center gap-2">
-                <button
-                    type="button"
-                    onClick={aoAlternarSeletorColunas}
-                    title="Escolher quais campos de Evento, Financeiro e Artistas aparecem na grid"
-                    className={`h-8 inline-flex items-center justify-center gap-1.5 rounded-lg border px-2.5 text-[11px] font-bold transition cursor-pointer ${seletorColunasAberto
-                        ? 'bg-[#1056f5] text-white border-[#1056f5]'
-                        : 'bg-blue-50 text-[#1056f5] border-blue-200 hover:bg-blue-100'
-                        }`}
-                >
-                    <SlidersHorizontal className="w-3.5 h-3.5" />
-                    <span>Editar Colunas ({totalColunasSelecionadas})</span>
-                </button>
-
-                <div className="relative flex-1 min-w-[180px]">
-                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <input
-                        type="text"
-                        placeholder="Filtro geral em qualquer célula visível..."
-                        value={filtros.pesquisaGeral}
-                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
-                        className={`${classeControle} w-full pl-8 pr-2.5`}
-                    />
-                </div>
-
                 <select
                     value={filtros.artistaTopo}
                     onChange={(e) => aoAlterarCampo('artistaTopo', e.target.value)}
@@ -150,7 +149,7 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                 <select
                     value={filtros.ano}
                     onChange={(e) => aoAlterarCampo('ano', e.target.value)}
-                    className={`${classeControle} w-full sm:w-34 cursor-pointer`}
+                    className={`${classeControle} w-full sm:w-32 cursor-pointer`}
                 >
                     <option value="TODOS">Ano: Todos</option>
                     {opcoesAnos.map((ano) => (
@@ -160,13 +159,13 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                     ))}
                 </select>
 
-                <div ref={menuMesesRef} className="relative w-full sm:w-44">
+                <div ref={menuMesesRef} className="relative w-full sm:w-40">
                     <button
                         type="button"
                         onClick={() => setMenuMesesAberto((v) => !v)}
                         className={`${classeControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtros.meses.length > 0
-                            ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
-                            : ''
+                                ? 'border-[#1056f5] bg-blue-50/40 text-[#1056f5] font-semibold'
+                                : ''
                             }`}
                     >
                         <span className="truncate">{obterResumoMeses()}</span>
@@ -196,14 +195,14 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                                             type="button"
                                             onClick={() => alternarSelecaoMes(mesObj.valor)}
                                             className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-left text-[11px] transition cursor-pointer ${selecionado
-                                                ? 'bg-blue-50 text-[#1056f5] font-semibold'
-                                                : 'text-slate-600 hover:bg-slate-100'
+                                                    ? 'bg-blue-50 text-[#1056f5] font-semibold'
+                                                    : 'text-slate-600 hover:bg-slate-100'
                                                 }`}
                                         >
                                             <span
                                                 className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionado
-                                                    ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                    : 'border-slate-300 bg-white'
+                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                        : 'border-slate-300 bg-white'
                                                     }`}
                                             >
                                                 {selecionado && (
@@ -222,7 +221,7 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                 <select
                     value={filtros.statusTopo}
                     onChange={(e) => aoAlterarCampo('statusTopo', e.target.value)}
-                    className={`${classeControle} w-full sm:w-36 cursor-pointer`}
+                    className={`${classeControle} w-full sm:w-34 cursor-pointer`}
                 >
                     <option value="TODOS">Status: Todos</option>
                     {opcoesStatus.map((st) => (
@@ -232,7 +231,108 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                     ))}
                 </select>
 
+                <div ref={menuFiltrosSalvosRef} className="relative w-full sm:w-48">
+                    <button
+                        type="button"
+                        onClick={() => setMenuFiltrosSalvosAberto((v) => !v)}
+                        title="Selecionar um conjunto de colunas salvo anteriormente"
+                        className={`${classeControle} w-full flex items-center justify-between gap-1.5 cursor-pointer ${filtroSalvoAtual
+                                ? 'border-[#1056f5] bg-blue-50/50 text-[#1056f5] font-semibold'
+                                : ''
+                            }`}
+                    >
+                        <span className="inline-flex items-center gap-1.5 truncate">
+                            <BookmarkCheck className="w-3.5 h-3.5 shrink-0 text-[#1056f5]" />
+                            <span className="truncate">
+                                {filtroSalvoAtual
+                                    ? filtroSalvoAtual.nome
+                                    : 'Selecionar Filtros Salvos'}
+                            </span>
+                        </span>
+                        <ChevronDown className="w-3.5 h-3.5 shrink-0 opacity-70" />
+                    </button>
+
+                    {menuFiltrosSalvosAberto && (
+                        <div className="absolute left-0 top-9 z-40 w-64 rounded-xl bg-white shadow-xl border border-slate-200 p-2 space-y-1.5">
+                            <div className="flex items-center justify-between border-b border-slate-100 pb-1 px-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                                    Filtros de Colunas Salvos ({filtrosSalvos.length})
+                                </span>
+                            </div>
+
+                            {filtrosSalvos.length === 0 ? (
+                                <p className="text-[11px] text-slate-400 text-center py-3 px-2">
+                                    Nenhum filtro salvo. Clique em <strong>Editar Colunas</strong>{' '}
+                                    para criar e salvar um filtro.
+                                </p>
+                            ) : (
+                                <div className="max-h-52 overflow-y-auto space-y-1">
+                                    {filtrosSalvos.map((itemSalvo) => {
+                                        const ativo = itemSalvo.id === filtroSalvoAtivoId
+                                        return (
+                                            <div
+                                                key={itemSalvo.id}
+                                                className={`flex items-center justify-between gap-1 rounded-lg px-2 py-1.5 text-[11px] transition ${ativo
+                                                        ? 'bg-blue-50 text-[#1056f5] font-bold'
+                                                        : 'hover:bg-slate-100 text-slate-700'
+                                                    }`}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        aoSelecionarFiltroSalvo(itemSalvo)
+                                                        setMenuFiltrosSalvosAberto(false)
+                                                    }}
+                                                    className="flex-1 text-left truncate cursor-pointer flex items-center gap-1.5"
+                                                >
+                                                    <span className="truncate">{itemSalvo.nome}</span>
+                                                    <span className="text-[9.5px] px-1.5 py-0.2 rounded-full bg-slate-200/80 text-slate-600 font-semibold shrink-0">
+                                                        {itemSalvo.colunas.length} col.
+                                                    </span>
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        aoExcluirFiltroSalvo(itemSalvo.id)
+                                                    }}
+                                                    title={`Apagar filtro "${itemSalvo.nome}"`}
+                                                    className="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer shrink-0"
+                                                >
+                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div className="relative flex-1 min-w-[170px]">
+                    <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                        type="text"
+                        placeholder="Filtro geral nas células..."
+                        value={filtros.pesquisaGeral}
+                        onChange={(e) => aoAlterarCampo('pesquisaGeral', e.target.value)}
+                        className={`${classeControle} w-full pl-8 pr-2.5`}
+                    />
+                </div>
+
                 <div className="flex items-center gap-1.5 ml-auto">
+                    <button
+                        type="button"
+                        onClick={aoAbrirModalColunas}
+                        title="Abrir modal para selecionar ou salvar colunas da grid"
+                        className="h-8 inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#1056f5] px-2.5 text-[11px] font-bold transition cursor-pointer"
+                    >
+                        <SlidersHorizontal className="w-3.5 h-3.5" />
+                        <span>Editar Colunas ({totalColunasSelecionadas})</span>
+                    </button>
+
                     <button
                         type="submit"
                         className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-900 text-white px-2.5 text-[11px] font-semibold transition cursor-pointer"
@@ -256,6 +356,16 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                         )}
                     </button>
 
+                    <button
+                        type="button"
+                        onClick={aoExportarPdf}
+                        title="Exportar visualização atual em PDF"
+                        className="h-8 inline-flex items-center justify-center gap-1 rounded-lg bg-[#2b4c7e] hover:bg-[#1e3a63] text-white px-2.5 text-[11px] font-semibold transition cursor-pointer"
+                    >
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>PDF</span>
+                    </button>
+
                     <div ref={menuOpcoesRef} className="relative">
                         <button
                             type="button"
@@ -277,17 +387,6 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                                     type="button"
                                     onClick={() => {
                                         setMenuExportacaoAberto(false)
-                                        aoExportarPdf()
-                                    }}
-                                    className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
-                                >
-                                    <Printer className="w-3.5 h-3.5 text-[#1056f5] shrink-0" />
-                                    <span>Exportar PDF</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMenuExportacaoAberto(false)
                                         aoExportarCsv()
                                     }}
                                     className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
@@ -305,6 +404,17 @@ export const FiltroCompartilhar: React.FC<IFiltroCompartilharProps> = ({
                                 >
                                     <FileSpreadsheet className="w-3.5 h-3.5 text-teal-600 shrink-0" />
                                     <span>Exportar XLSX (.xlsx)</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMenuExportacaoAberto(false)
+                                        aoExportarPdf()
+                                    }}
+                                    className="w-full px-3 py-1.5 text-left text-[11px] font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
+                                >
+                                    <Printer className="w-3.5 h-3.5 text-[#1056f5] shrink-0" />
+                                    <span>Exportar PDF</span>
                                 </button>
                             </div>
                         )}

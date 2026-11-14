@@ -9,11 +9,12 @@ import {
 import {
     CATALOGO_CAMPOS_COMPARTILHAR,
     CAMPOS_SELECIONADOS_PADRAO,
+    FILTROS_SALVOS_INICIAIS,
     type IDefinicaoCampoCompartilhar,
     type IFiltroColunaDinamica,
+    type IFiltroColunasSalvo,
     type IFiltrosCompartilhar,
     type IRegistroUnificadoCompartilhar,
-    type TCategoriaCampoCompartilhar,
     type TIdCampoCompartilhar,
 } from '@/types/compartilhar.types'
 import type { IArtista } from '@/types/artista.types'
@@ -22,9 +23,11 @@ import { SeletorCamposPermissao } from './components/SeletorCamposPermissao'
 import { TabelaCompartilhar } from './components/TabelaCompartilhar'
 
 const CHAVE_STORAGE_COLUNAS_COMPARTILHAR =
-    '@SarsPlanner:colunasCompartilhar:v1'
+    '@SarsPlanner:colunasCompartilhar:v2'
 const CHAVE_STORAGE_FILTROS_COMPARTILHAR =
-    '@SarsPlanner:filtrosCompartilhar:v1'
+    '@SarsPlanner:filtrosCompartilhar:v2'
+const CHAVE_STORAGE_FILTROS_SALVOS_COMPARTILHAR =
+    '@SarsPlanner:filtrosSalvosCompartilhar:v1'
 
 const FILTROS_INICIAIS_COMPARTILHAR: IFiltrosCompartilhar = {
     artistaTopo: 'TODOS',
@@ -51,10 +54,7 @@ export const CompartilharPage: React.FC = () => {
     const { listaEventos, obterStatusPorId } = useEventos()
     const { registrosCalculados } = useFinanceiro()
     const listaArtistas = artistasMock as IArtista[]
-
-    const [seletorColunasAberto, setSeletorColunasAberto] =
-        useState<boolean>(true)
-
+    const [modalColunasAberta, setModalColunasAberta] = useState<boolean>(false)
     const [camposSelecionados, setCamposSelecionados] = useState<
         TIdCampoCompartilhar[]
     >(() => {
@@ -69,6 +69,26 @@ export const CompartilharPage: React.FC = () => {
         }
         return CAMPOS_SELECIONADOS_PADRAO
     })
+
+    const [filtrosSalvos, setFiltrosSalvos] = useState<IFiltroColunasSalvo[]>(
+        () => {
+            const salvo = localStorage.getItem(
+                CHAVE_STORAGE_FILTROS_SALVOS_COMPARTILHAR
+            )
+            if (salvo) {
+                try {
+                    return JSON.parse(salvo) as IFiltroColunasSalvo[]
+                } catch {
+                    localStorage.removeItem(CHAVE_STORAGE_FILTROS_SALVOS_COMPARTILHAR)
+                }
+            }
+            return FILTROS_SALVOS_INICIAIS
+        }
+    )
+
+    const [filtroSalvoAtivoId, setFiltroSalvoAtivoId] = useState<string | null>(
+        null
+    )
 
     const [filtros, setFiltros] = useState<IFiltrosCompartilhar>(() => {
         const salvo = localStorage.getItem(CHAVE_STORAGE_FILTROS_COMPARTILHAR)
@@ -88,6 +108,13 @@ export const CompartilharPage: React.FC = () => {
             JSON.stringify(camposSelecionados)
         )
     }, [camposSelecionados])
+
+    useEffect(() => {
+        localStorage.setItem(
+            CHAVE_STORAGE_FILTROS_SALVOS_COMPARTILHAR,
+            JSON.stringify(filtrosSalvos)
+        )
+    }, [filtrosSalvos])
 
     useEffect(() => {
         localStorage.setItem(
@@ -295,35 +322,39 @@ export const CompartilharPage: React.FC = () => {
         return somas
     }, [definicoesColunasAtivas, registrosFiltrados])
 
-    const alternarSelecaoCampo = (idCampo: TIdCampoCompartilhar) => {
-        setCamposSelecionados((ant) => {
-            if (ant.includes(idCampo)) {
-                return ant.filter((id) => id !== idCampo)
-            }
-            return [...ant, idCampo]
-        })
+    const manipularSelecionarFiltroSalvo = (filtroSalvo: IFiltroColunasSalvo) => {
+        setCamposSelecionados(filtroSalvo.colunas)
+        setFiltroSalvoAtivoId(filtroSalvo.id)
     }
 
-    const selecionarCategoriaInteira = (cat: TCategoriaCampoCompartilhar) => {
-        const idsDaCategoria = CATALOGO_CAMPOS_COMPARTILHAR.filter(
-            (c) => c.categoria === cat
-        ).map((c) => c.id)
-
-        setCamposSelecionados((ant) => {
-            const conjunto = new Set([...ant, ...idsDaCategoria])
-            return Array.from(conjunto)
-        })
+    const manipularExcluirFiltroSalvo = (idFiltroSalvo: string) => {
+        setFiltrosSalvos((ant) => ant.filter((f) => f.id !== idFiltroSalvo))
+        if (filtroSalvoAtivoId === idFiltroSalvo) {
+            setFiltroSalvoAtivoId(null)
+        }
     }
 
-    const removerCategoriaInteira = (cat: TCategoriaCampoCompartilhar) => {
-        const idsDaCategoria = new Set(
-            CATALOGO_CAMPOS_COMPARTILHAR.filter((c) => c.categoria === cat).map(
-                (c) => c.id
-            )
-        )
-        setCamposSelecionados((ant) =>
-            ant.filter((id) => !idsDaCategoria.has(id))
-        )
+    const manipularFiltrarColunasSemSalvar = (
+        colunasEscolhidas: TIdCampoCompartilhar[]
+    ) => {
+        setCamposSelecionados(colunasEscolhidas)
+        setFiltroSalvoAtivoId(null)
+        setModalColunasAberta(false)
+    }
+
+    const manipularSalvarNovoFiltro = (
+        nomeFiltro: string,
+        colunasEscolhidas: TIdCampoCompartilhar[]
+    ) => {
+        const novoFiltroSalvo: IFiltroColunasSalvo = {
+            id: `filtro-${Date.now()}`,
+            nome: nomeFiltro,
+            colunas: colunasEscolhidas,
+        }
+        setFiltrosSalvos((ant) => [...ant, novoFiltroSalvo])
+        setCamposSelecionados(colunasEscolhidas)
+        setFiltroSalvoAtivoId(novoFiltroSalvo.id)
+        setModalColunasAberta(false)
     }
 
     const atualizarCampoFiltroTopo = <K extends keyof IFiltrosCompartilhar>(
@@ -395,7 +426,7 @@ export const CompartilharPage: React.FC = () => {
         document.body.removeChild(link)
         URL.revokeObjectURL(url)
     }
-    
+
     const exportarParaXlsx = () => {
         const escaparXml = (str: string) =>
             str
@@ -465,8 +496,11 @@ export const CompartilharPage: React.FC = () => {
                 totalFiltrados={registrosFiltrados.length}
                 totalColunasSelecionadas={definicoesColunasAtivas.length}
                 quantidadeFiltrosColunaAtivos={quantidadeFiltrosColunaAtivos}
-                seletorColunasAberto={seletorColunasAberto}
-                aoAlternarSeletorColunas={() => setSeletorColunasAberto((v) => !v)}
+                filtrosSalvos={filtrosSalvos}
+                filtroSalvoAtivoId={filtroSalvoAtivoId}
+                aoSelecionarFiltroSalvo={manipularSelecionarFiltroSalvo}
+                aoExcluirFiltroSalvo={manipularExcluirFiltroSalvo}
+                aoAbrirModalColunas={() => setModalColunasAberta(true)}
                 aoAlterarCampo={atualizarCampoFiltroTopo}
                 aoFiltrar={() => { }}
                 aoLimpar={limparTodosOsFiltros}
@@ -474,18 +508,6 @@ export const CompartilharPage: React.FC = () => {
                 aoExportarXlsx={exportarParaXlsx}
                 aoExportarPdf={() => window.print()}
             />
-
-            {seletorColunasAberto && (
-                <SeletorCamposPermissao
-                    camposSelecionados={camposSelecionados}
-                    aoAlternarCampo={alternarSelecaoCampo}
-                    aoSelecionarCategoriaInteira={selecionarCategoriaInteira}
-                    aoRemoverCategoriaInteira={removerCategoriaInteira}
-                    aoRestaurarPadrao={() =>
-                        setCamposSelecionados(CAMPOS_SELECIONADOS_PADRAO)
-                    }
-                />
-            )}
 
             <TabelaCompartilhar
                 registrosFiltrados={registrosFiltrados}
@@ -495,6 +517,18 @@ export const CompartilharPage: React.FC = () => {
                 filtros={filtros}
                 aoAtualizarFiltroColuna={atualizarFiltroDeColuna}
                 aoAlternarOrdenacaoColuna={alternarOrdenacaoColuna}
+            />
+
+            <SeletorCamposPermissao
+                aberto={modalColunasAberta}
+                camposAtuaisNaGrid={camposSelecionados}
+                filtrosSalvos={filtrosSalvos}
+                filtroSalvoAtivoId={filtroSalvoAtivoId}
+                aoFecharCancelar={() => setModalColunasAberta(false)}
+                aoFiltrarColunasSemSalvar={manipularFiltrarColunasSemSalvar}
+                aoSalvarNovoFiltro={manipularSalvarNovoFiltro}
+                aoSelecionarFiltroSalvo={manipularSelecionarFiltroSalvo}
+                aoExcluirFiltroSalvo={manipularExcluirFiltroSalvo}
             />
         </div>
     )

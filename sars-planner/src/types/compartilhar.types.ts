@@ -8,6 +8,7 @@ export type TTipoValorCampoCompartilhar =
     | 'booleano'
 
 export type TIdCampoCompartilhar =
+    // Campos de Evento
     | 'ev_dia'
     | 'ev_data'
     | 'ev_horario'
@@ -19,6 +20,7 @@ export type TIdCampoCompartilhar =
     | 'ev_producao'
     | 'ev_status'
     | 'ev_realizado'
+    // Campos do Financeiro
     | 'fin_contato'
     | 'fin_diaria_sn'
     | 'fin_diaria_valor'
@@ -30,6 +32,7 @@ export type TIdCampoCompartilhar =
     | 'fin_total_pago'
     | 'fin_falta_pagar'
     | 'fin_qtd_parcelas'
+    // Campos de Artistas
     | 'art_sigla'
     | 'art_nome_completo'
     | 'art_email'
@@ -44,6 +47,12 @@ export interface IDefinicaoCampoCompartilhar {
     tipoValor: TTipoValorCampoCompartilhar
     larguraMinimaPx: number
     alinhamento: 'left' | 'center' | 'right'
+}
+
+export interface IFiltroColunasSalvo {
+    id: string
+    nome: string
+    colunas: TIdCampoCompartilhar[]
 }
 
 export interface IRegistroUnificadoCompartilhar {
@@ -105,6 +114,7 @@ export const ROTULOS_CATEGORIAS_COMPARTILHAR: Record<
 }
 
 export const CATALOGO_CAMPOS_COMPARTILHAR: IDefinicaoCampoCompartilhar[] = [
+    // 1. EVENTO
     {
         id: 'ev_dia',
         categoria: 'EVENTO',
@@ -204,6 +214,8 @@ export const CATALOGO_CAMPOS_COMPARTILHAR: IDefinicaoCampoCompartilhar[] = [
         larguraMinimaPx: 95,
         alinhamento: 'center',
     },
+
+    // 2. FINANCEIRO
     {
         id: 'fin_contato',
         categoria: 'FINANCEIRO',
@@ -303,6 +315,8 @@ export const CATALOGO_CAMPOS_COMPARTILHAR: IDefinicaoCampoCompartilhar[] = [
         larguraMinimaPx: 145,
         alinhamento: 'center',
     },
+
+    // 3. ARTISTAS
     {
         id: 'art_sigla',
         categoria: 'ARTISTA',
@@ -360,4 +374,35 @@ export const CAMPOS_SELECIONADOS_PADRAO: TIdCampoCompartilhar[] = [
     'fin_operacional',
     'ev_producao',
     'ev_valor_show',
+]
+
+export const FILTROS_SALVOS_INICIAIS: IFiltroColunasSalvo[] = [
+    {
+        id: 'padrao-logistica',
+        nome: 'Logística e Produção',
+        colunas: [
+            'ev_dia',
+            'ev_cidade_uf',
+            'fin_contato',
+            'fin_diaria_sn',
+            'fin_diaria_valor',
+            'fin_custos',
+            'fin_operacional',
+            'ev_producao',
+        ],
+    },
+    {
+        id: 'padrao-financeiro',
+        nome: 'Resumo Financeiro',
+        colunas: [
+            'ev_dia',
+            'ev_data',
+            'ev_cidade_uf',
+            'art_sigla',
+            'ev_valor_show',
+            'fin_receita_total',
+            'fin_despesa_total',
+            'fin_valor_liquido',
+        ],
+    },
 ]
