@@ -73,7 +73,7 @@ export const ModalDespesasEvento: React.FC<IModalDespesasEventoProps> = ({
                     <button
                         type="button"
                         onClick={aoFechar}
-                        title="Fechar modal de despesas"
+                        title="Fechar "
                         className="w-7 h-7 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-700 flex items-center justify-center transition cursor-pointer"
                     >
                         <X className="w-4 h-4" />

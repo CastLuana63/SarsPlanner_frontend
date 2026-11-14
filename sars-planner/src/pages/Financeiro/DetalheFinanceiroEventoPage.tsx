@@ -6,7 +6,6 @@ import {
     Trash2,
     Pencil,
     Check,
-    Receipt,
     Percent,
     Sparkles,
     Printer,
@@ -163,10 +162,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                 </span>
                             )}
                         </div>
-                        <p className="text-[10.5px] text-slate-400">
-                            Controle de compartilhamento, parcelamento, desconto opcional e
-                            despesas do evento
-                        </p>
                     </div>
                 </div>
 
@@ -176,16 +171,7 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                         onClick={() => navigate(`/eventos/${registro.evento_id}`)}
                         className="h-7 inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 px-2.5 text-[11px] font-semibold cursor-pointer"
                     >
-                        <span>Ver Detalhes / Mapa do Evento</span>
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setModalDespesasAberta(true)}
-                        className="h-7 inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 px-2.5 text-[11px] font-semibold cursor-pointer"
-                    >
-                        <Receipt className="w-3 h-3" />
-                        <span>Modal de Despesas ({registro.despesas.length})</span>
+                        <span>Detalhes do Evento</span>
                     </button>
 
                     <button
@@ -223,9 +209,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <strong className="text-sm sm:text-base font-extrabold text-emerald-600 mt-0.5 block">
                         {formatarMoedaBRL(registro.totalPago)}
                     </strong>
-                    <span className="text-[9.5px] text-slate-400">
-                        Parcelas com status OK
-                    </span>
                 </div>
 
                 <div className="bg-white rounded-xl border border-amber-200 p-3">
@@ -235,9 +218,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <strong className="text-sm sm:text-base font-extrabold text-amber-600 mt-0.5 block">
                         {formatarMoedaBRL(registro.totalFaltaPagar)}
                     </strong>
-                    <span className="text-[9.5px] text-slate-400">
-                        Parcelas com status NÃO OK
-                    </span>
                 </div>
 
                 <div
@@ -250,9 +230,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <strong className="text-sm sm:text-base font-extrabold text-red-600 mt-0.5 block">
                         {formatarMoedaBRL(registro.despesaTotal)}
                     </strong>
-                    <span className="text-[9.5px] text-slate-400 underline">
-                        Clique para gerenciar despesas
-                    </span>
                 </div>
 
                 <div className="bg-white rounded-xl border border-blue-200 p-3 col-span-2 sm:col-span-1">
@@ -262,9 +239,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <strong className="text-sm sm:text-base font-extrabold text-[#1056f5] mt-0.5 block">
                         {formatarMoedaBRL(registro.valorLiquido)}
                     </strong>
-                    <span className="text-[9.5px] text-slate-400">
-                        Receita Total − Despesas
-                    </span>
                 </div>
             </section>
 
@@ -273,11 +247,8 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <section className="bg-white rounded-xl border border-slate-200 p-4 shadow-[0_1px_6px_rgba(15,23,42,0.02)] space-y-3.5">
                         <div className="border-b border-slate-200 pb-2">
                             <h2 className="text-sm font-bold text-slate-900">
-                                Compartilhar — Dados Operacionais
+                                Dados Operacionais
                             </h2>
-                            <p className="text-[10.5px] text-slate-400">
-                                Edite qualquer campo e pressione Enter ou clique fora para salvar
-                            </p>
                         </div>
 
                         <div className="space-y-1.5">
@@ -412,9 +383,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                 <h2 className="text-sm font-bold text-slate-900">
                                     Despesas do Evento
                                 </h2>
-                                <p className="text-[10.5px] text-slate-400">
-                                    Total lançado: {formatarMoedaBRL(registro.despesaTotal)}
-                                </p>
                             </div>
 
                             <button
@@ -471,19 +439,15 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
                         <div>
                             <h2 className="text-sm sm:text-base font-bold text-slate-900">
-                                Pagamento e Parcelas ({registro.quantidadeParcelasPagas}/
-                                {registro.quantidadeParcelasTotal} pagas)
+                                Pagamento e Parcelas
                             </h2>
-                            <p className="text-[10.5px] text-slate-400">
-                                Cadastre parcelas individuais ou gere o parcelamento automático
-                            </p>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-2 print:hidden">
                             <div className="flex items-center gap-1.5 bg-amber-50/80 border border-amber-200 rounded-lg px-2.5 py-1">
                                 <Percent className="w-3.5 h-3.5 text-amber-600" />
                                 <label className="text-[10.5px] font-bold text-amber-900">
-                                    Desconto (opcional):
+                                    Desconto
                                 </label>
                                 <input
                                     type="number"
@@ -506,7 +470,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                     }}
                                     className="w-14 h-6 rounded border border-amber-300 bg-white px-1.5 text-center text-xs font-extrabold text-amber-900 focus:outline-none"
                                 />
-                                <span className="text-xs font-bold text-amber-800">%</span>
                             </div>
 
                             <button
@@ -515,7 +478,7 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                 className="h-8 inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#1056f5] px-2.5 text-[11px] font-bold transition cursor-pointer"
                             >
                                 <Sparkles className="w-3.5 h-3.5" />
-                                <span>Gerar N Parcelas</span>
+                                <span>Gerar Parcelas</span>
                             </button>
                         </div>
                     </div>
@@ -717,8 +680,8 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                                             exibirFeedbackSalvo()
                                                         }}
                                                         className={`h-7 rounded-md px-2.5 text-[11px] font-extrabold border transition cursor-pointer focus:outline-none ${parc.status === 'OK'
-                                                                ? 'bg-emerald-200/80 text-emerald-900 border-emerald-300'
-                                                                : 'bg-red-200/80 text-red-900 border-red-300'
+                                                            ? 'bg-emerald-200/80 text-emerald-900 border-emerald-300'
+                                                            : 'bg-red-200/80 text-red-900 border-red-300'
                                                             }`}
                                                     >
                                                         <option value="OK">OK</option>
@@ -788,33 +751,6 @@ export const DetalheFinanceiroEventoPage: React.FC = () => {
                                     })
                                 )}
                             </tbody>
-
-                            <tfoot className="bg-slate-100 border-t-2 border-slate-300 text-xs font-extrabold text-slate-800">
-                                <tr>
-                                    <td colSpan={2} className="py-2.5 px-3">
-                                        TOTALIZADOR ({registro.quantidadeParcelasTotal} parcelas)
-                                    </td>
-                                    <td className="py-2.5 px-3 text-right">
-                                        {formatarMoedaBRL(registro.receitaBrutaParcelas)}
-                                    </td>
-                                    {registro.desconto_percentual > 0 && (
-                                        <td className="py-2.5 px-3 text-right text-emerald-700">
-                                            {formatarMoedaBRL(registro.receitaTotal)}
-                                        </td>
-                                    )}
-                                    <td
-                                        colSpan={2}
-                                        className="py-2.5 px-3 text-right text-[11px]"
-                                    >
-                                        <span className="text-emerald-700 mr-2">
-                                            Pago: {formatarMoedaBRL(registro.totalPago)}
-                                        </span>
-                                        <span className="text-red-600">
-                                            Falta: {formatarMoedaBRL(registro.totalFaltaPagar)}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </section>
