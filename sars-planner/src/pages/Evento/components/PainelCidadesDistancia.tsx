@@ -39,9 +39,6 @@ export const PainelCidadesDistancia: React.FC<IPainelCidadesDistanciaProps> = ({
                 </div>
 
                 <div>
-                    <label className="block text-[9.5px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-                        Selecionar cidade para traçar rota no mapa (1 por vez)
-                    </label>
                     <select
                         value={cidadeSelecionada ? String(cidadeSelecionada.eventoId) : 'TODAS'}
                         onChange={(e) => manipularMudancaSelect(e.target.value)}
