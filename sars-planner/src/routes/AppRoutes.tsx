@@ -11,6 +11,7 @@ import { EventosPage } from '@/pages/Evento/EventosPage'
 import { DetalheEventoPage } from '@/pages/Evento/components/DetalheEventoPage'
 import { FinanceiroPage } from '@/pages/Financeiro/FinanceiroPage'
 import { DetalheFinanceiroEventoPage } from '@/pages/Financeiro/DetalheFinanceiroEventoPage'
+import { CompartilharPage } from '@/pages/Compartilhar/CompartilharPage'
 import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -45,10 +46,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="/eventos" element={<EventosPage />} />
           <Route path="/eventos/:id" element={<DetalheEventoPage />} />
           <Route path="/artistas" element={<ArtistasPage />} />
-          <Route
-            path="/compartilhar"
-            element={<EmDesenvolvimentoPage tituloPagina="Compartilhar" />}
-          />
+          <Route path="/compartilhar" element={<CompartilharPage />} />
           <Route path="/financeira" element={<FinanceiroPage />} />
           <Route
             path="/financeira/:eventoId"
