@@ -32,7 +32,6 @@ const calcularDistanciaETempoRodoviario = (
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     const distanciaLinhaReta = raioTerraKm * c
     const distanciaKm = Math.max(1, Math.round(distanciaLinhaReta * 1.28))
-    // velocidade média rodoviária estimada de 78 km/h
     const tempoMinutos = Math.max(5, Math.round((distanciaKm / 78) * 60))
     const horas = Math.floor(tempoMinutos / 60)
     const minutos = tempoMinutos % 60
@@ -198,21 +197,9 @@ export const DetalheEventoPage: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-1.5">
-                        {/* <button
-                            type="button"
-                            onClick={() => {
-                                setCidadeRotaSelecionada(null)
-                                dispararFeedbackSalvo()
-                            }}
-                            className="h-7 inline-flex items-center gap-1.5 rounded-lg bg-[#1056f5] hover:bg-blue-700 text-white px-2.5 text-[11px] font-semibold transition cursor-pointer shadow-2xs"
-                        >
-                            <Navigation className="w-3 h-3" />
-                            <span>Calcular Distância</span>
-                        </button> */}
-
                         <button
                             type="button"
-                            onClick={() => setAvisoPagamentos((v) => !v)}
+                            onClick={() => navigate(`/financeira/${eventoAtual.id}`)}
                             className="h-7 inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 px-2.5 text-[11px] font-semibold transition cursor-pointer"
                         >
                             <DollarSign className="w-3 h-3 text-emerald-600" />

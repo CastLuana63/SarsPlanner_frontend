@@ -1,0 +1,220 @@
+[
+    {
+        "evento_id": 101,
+        "contato_nome_telefone": "GUSTAVO 44 99868183",
+        "diaria_ativa": true,
+        "diaria_valor": 3500,
+        "producao_custos": "CONTRATANTE",
+        "producao_operacional": "CONTRATANTE",
+        "desconto_percentual": 0,
+        "parcelas": [
+            {
+                "id": 1,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-06-18",
+                "valor_bruto": 50000,
+                "status": "OK"
+            },
+            {
+                "id": 2,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-09-15",
+                "valor_bruto": 50000,
+                "status": "OK"
+            },
+            {
+                "id": 3,
+                "numero_parcela": 3,
+                "data_pagamento": "2026-10-15",
+                "valor_bruto": 100000,
+                "status": "OK"
+            },
+            {
+                "id": 4,
+                "numero_parcela": 4,
+                "data_pagamento": "2026-11-16",
+                "valor_bruto": 100000,
+                "status": "NAO_OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 1,
+                "data_despesa": "2026-10-16",
+                "valor": 12500,
+                "justificativa": "Transporte e logística de equipamentos (Campo Grande)"
+            },
+            {
+                "id": 2,
+                "data_despesa": "2026-10-17",
+                "valor": 3500,
+                "justificativa": "Diária de alimentação e hospedagem equipe técnica"
+            }
+        ]
+    },
+    {
+        "evento_id": 102,
+        "contato_nome_telefone": "MARCOS PACHECO 11 99741-2200",
+        "diaria_ativa": true,
+        "diaria_valor": 3500,
+        "producao_custos": "CONTRATANTE",
+        "producao_operacional": "LOCAL",
+        "desconto_percentual": 5,
+        "parcelas": [
+            {
+                "id": 10,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-09-20",
+                "valor_bruto": 110000,
+                "status": "OK"
+            },
+            {
+                "id": 11,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-10-22",
+                "valor_bruto": 110000,
+                "status": "NAO_OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 10,
+                "data_despesa": "2026-10-24",
+                "valor": 18000,
+                "justificativa": "Comissão comercial e taxas operacionais SP"
+            }
+        ]
+    },
+    {
+        "evento_id": 103,
+        "contato_nome_telefone": "LUCAS SOARES 67 99811-4500",
+        "diaria_ativa": false,
+        "diaria_valor": 0,
+        "producao_custos": "A DEFINIR",
+        "producao_operacional": "CONTRATANTE",
+        "desconto_percentual": 0,
+        "parcelas": [
+            {
+                "id": 20,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-10-10",
+                "valor_bruto": 60000,
+                "status": "OK"
+            },
+            {
+                "id": 21,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-10-30",
+                "valor_bruto": 60000,
+                "status": "NAO_OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 20,
+                "data_despesa": "2026-10-30",
+                "valor": 9200,
+                "justificativa": "Fretamento van local Corumbá - MS"
+            }
+        ]
+    },
+    {
+        "evento_id": 104,
+        "contato_nome_telefone": "RICARDO 44 99123-8899",
+        "diaria_ativa": true,
+        "diaria_valor": 2500,
+        "producao_custos": "CONTRATANTE",
+        "producao_operacional": "CONTRATANTE",
+        "desconto_percentual": 0,
+        "parcelas": [
+            {
+                "id": 30,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-10-15",
+                "valor_bruto": 75000,
+                "status": "OK"
+            },
+            {
+                "id": 31,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-11-01",
+                "valor_bruto": 75000,
+                "status": "NAO_OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 30,
+                "data_despesa": "2026-11-02",
+                "valor": 15000,
+                "justificativa": "Imposto nota fiscal e produção PR"
+            }
+        ]
+    },
+    {
+        "evento_id": 105,
+        "contato_nome_telefone": "CURVINA 16 99234-5566",
+        "diaria_ativa": true,
+        "diaria_valor": 3000,
+        "producao_custos": "TUDO INCLUSO",
+        "producao_operacional": "EQUIPE INTERNA",
+        "desconto_percentual": 10,
+        "parcelas": [
+            {
+                "id": 40,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-10-05",
+                "valor_bruto": 80000,
+                "status": "OK"
+            },
+            {
+                "id": 41,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-11-05",
+                "valor_bruto": 80000,
+                "status": "OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 40,
+                "data_despesa": "2026-11-06",
+                "valor": 22000,
+                "justificativa": "Backline, iluminação e som Ribeirão Preto"
+            }
+        ]
+    },
+    {
+        "evento_id": 106,
+        "contato_nome_telefone": "NETO PRODUÇÕES 41 99876-1020",
+        "diaria_ativa": true,
+        "diaria_valor": 3500,
+        "producao_custos": "CONTRATANTE",
+        "producao_operacional": "CONTRATANTE",
+        "desconto_percentual": 0,
+        "parcelas": [
+            {
+                "id": 50,
+                "numero_parcela": 1,
+                "data_pagamento": "2026-10-20",
+                "valor_bruto": 120000,
+                "status": "OK"
+            },
+            {
+                "id": 51,
+                "numero_parcela": 2,
+                "data_pagamento": "2026-11-06",
+                "valor_bruto": 120000,
+                "status": "OK"
+            }
+        ],
+        "despesas": [
+            {
+                "id": 50,
+                "data_despesa": "2026-11-07",
+                "valor": 19500,
+                "justificativa": "Logística aérea e hotelaria Curitiba - PR"
+            }
+        ]
+    }
+]

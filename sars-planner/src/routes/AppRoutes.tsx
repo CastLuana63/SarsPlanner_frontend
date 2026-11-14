@@ -8,8 +8,10 @@ import { AgendaPage } from '@/pages/Agenda/AgendaPage'
 import { ArtistasPage } from '@/pages/Artista/ArtistasPage'
 import { AlertasPage } from '@/pages/Alerta/AlertasPage'
 import { EventosPage } from '@/pages/Evento/EventosPage'
-import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 import { DetalheEventoPage } from '@/pages/Evento/components/DetalheEventoPage'
+import { FinanceiroPage } from '@/pages/Financeiro/FinanceiroPage'
+import { DetalheFinanceiroEventoPage } from '@/pages/Financeiro/DetalheFinanceiroEventoPage'
+import { EmDesenvolvimentoPage } from '@/pages/EmDesenvolvimento/EmDesenvolvimentoPage'
 
 const RotaProtegida: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { estaAutenticado } = useAutenticacao()
@@ -47,9 +49,10 @@ export const AppRoutes: React.FC = () => {
             path="/compartilhar"
             element={<EmDesenvolvimentoPage tituloPagina="Compartilhar" />}
           />
+          <Route path="/financeira" element={<FinanceiroPage />} />
           <Route
-            path="/financeira"
-            element={<EmDesenvolvimentoPage tituloPagina="Financeira" />}
+            path="/financeira/:eventoId"
+            element={<DetalheFinanceiroEventoPage />}
           />
           <Route path="/agenda" element={<AgendaPage />} />
           <Route path="/alertas" element={<AlertasPage />} />

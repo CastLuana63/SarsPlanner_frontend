@@ -1,6 +1,7 @@
 import { AutenticacaoProvider } from '@/contexts/AutenticacaoContext'
 import { NotificacoesProvider } from '@/contexts/NotificacoesContext'
 import { EventosProvider } from '@/contexts/EventosContext'
+import { FinanceiroProvider } from '@/contexts/FinanceiroContext'
 import { AppRoutes } from '@/routes/AppRoutes'
 
 export function App() {
@@ -8,7 +9,9 @@ export function App() {
     <AutenticacaoProvider>
       <NotificacoesProvider>
         <EventosProvider>
-          <AppRoutes />
+          <FinanceiroProvider>
+            <AppRoutes />
+          </FinanceiroProvider>
         </EventosProvider>
       </NotificacoesProvider>
     </AutenticacaoProvider>

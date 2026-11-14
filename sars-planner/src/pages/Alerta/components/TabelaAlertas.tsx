@@ -24,6 +24,7 @@ import type {
     IGrupoHierarquicoMesAlerta,
     TLinhaVirtualHierarquica,
 } from '@/types/notificacao.types'
+import { useNavigate } from 'react-router-dom'
 
 const NOMES_MESES_POR_NUMERO: Record<number, string> = {
     1: 'Janeiro',
@@ -76,7 +77,7 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
     const [dropdownColunaAberto, setDropdownColunaAberto] =
         useState<TDropdownColunaAtivo>(null)
     const cabecalhoColunasRef = useRef<HTMLDivElement>(null)
-
+    const navigate = useNavigate()
     useEffect(() => {
         const manipularCliqueFora = (evento: MouseEvent) => {
             if (
@@ -296,9 +297,9 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 aoAlterarCampoFiltro('direcaoOrdenacao', 'desc')
                                             }}
                                             className={`px-2 py-1 rounded text-[10.5px] font-semibold flex items-center justify-center gap-1 cursor-pointer ${filtros.campoOrdenacao === 'data' &&
-                                                    filtros.direcaoOrdenacao === 'desc'
-                                                    ? 'bg-[#1056f5] text-white'
-                                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                filtros.direcaoOrdenacao === 'desc'
+                                                ? 'bg-[#1056f5] text-white'
+                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                                 }`}
                                         >
                                             <ArrowDown className="w-3 h-3" />
@@ -312,9 +313,9 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                 aoAlterarCampoFiltro('direcaoOrdenacao', 'asc')
                                             }}
                                             className={`px-2 py-1 rounded text-[10.5px] font-semibold flex items-center justify-center gap-1 cursor-pointer ${filtros.campoOrdenacao === 'data' &&
-                                                    filtros.direcaoOrdenacao === 'asc'
-                                                    ? 'bg-[#1056f5] text-white'
-                                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                filtros.direcaoOrdenacao === 'asc'
+                                                ? 'bg-[#1056f5] text-white'
+                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                                 }`}
                                         >
                                             <ArrowUp className="w-3 h-3" />
@@ -352,8 +353,8 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                         alternarItemArrayFiltro('diasSelecionados', diaStr)
                                                     }
                                                     className={`h-6 rounded text-[10.5px] font-semibold transition cursor-pointer ${ativo
-                                                            ? 'bg-[#1056f5] text-white shadow-2xs'
-                                                            : 'bg-slate-100/80 text-slate-700 hover:bg-blue-50 hover:text-[#1056f5]'
+                                                        ? 'bg-[#1056f5] text-white shadow-2xs'
+                                                        : 'bg-slate-100/80 text-slate-700 hover:bg-blue-50 hover:text-[#1056f5]'
                                                         }`}
                                                 >
                                                     {Number(diaStr)}
@@ -457,14 +458,14 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                     alternarItemArrayFiltro('ufsSelecionadas', siglaUf)
                                                 }
                                                 className={`flex items-center gap-1.5 rounded px-2 py-1 text-[11px] cursor-pointer ${selecionada
-                                                        ? 'bg-blue-50 text-[#1056f5] font-bold'
-                                                        : 'text-slate-600 hover:bg-slate-100'
+                                                    ? 'bg-blue-50 text-[#1056f5] font-bold'
+                                                    : 'text-slate-600 hover:bg-slate-100'
                                                     }`}
                                             >
                                                 <span
                                                     className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionada
-                                                            ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                            : 'border-slate-300 bg-white'
+                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                        : 'border-slate-300 bg-white'
                                                         }`}
                                                 >
                                                     {selecionada && (
@@ -537,14 +538,14 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                     )
                                                 }
                                                 className={`w-full flex items-center gap-2 rounded px-2 py-1 text-[11px] cursor-pointer ${selecionado
-                                                        ? 'bg-blue-50 text-[#1056f5] font-bold'
-                                                        : 'text-slate-600 hover:bg-slate-100'
+                                                    ? 'bg-blue-50 text-[#1056f5] font-bold'
+                                                    : 'text-slate-600 hover:bg-slate-100'
                                                     }`}
                                             >
                                                 <span
                                                     className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionado
-                                                            ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                            : 'border-slate-300 bg-white'
+                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                        : 'border-slate-300 bg-white'
                                                         }`}
                                                 >
                                                     {selecionado && (
@@ -617,14 +618,14 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                     )
                                                 }
                                                 className={`w-full flex items-center gap-2 rounded px-2 py-1 text-[11px] cursor-pointer ${selecionada
-                                                        ? 'bg-blue-50 text-[#1056f5] font-bold'
-                                                        : 'text-slate-600 hover:bg-slate-100'
+                                                    ? 'bg-blue-50 text-[#1056f5] font-bold'
+                                                    : 'text-slate-600 hover:bg-slate-100'
                                                     }`}
                                             >
                                                 <span
                                                     className={`w-3.5 h-3.5 rounded flex items-center justify-center border ${selecionada
-                                                            ? 'bg-[#1056f5] border-[#1056f5] text-white'
-                                                            : 'border-slate-300 bg-white'
+                                                        ? 'bg-[#1056f5] border-[#1056f5] text-white'
+                                                        : 'border-slate-300 bg-white'
                                                         }`}
                                                 >
                                                     {selecionada && (
@@ -713,8 +714,8 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                     }}
                                     onClick={() => !alerta.lida && aoMarcarComoLido(alerta.id)}
                                     className={`grid ${GRADE_COLUNAS_TEMPLATE} ${ESTILOS_PADRAO_GRID.linhaDadosBase} ${ehUltimaLinhaDoMes
-                                            ? 'border-b border-slate-200'
-                                            : 'border-b border-slate-100'
+                                        ? 'border-b border-slate-200'
+                                        : 'border-b border-slate-100'
                                         } ${alerta.concluida
                                             ? 'bg-slate-50/60 text-slate-400'
                                             : !alerta.lida
@@ -761,8 +762,8 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                     <div
                                         title={alerta.descricao}
                                         className={`px-2 truncate ${alerta.concluida
-                                                ? 'line-through text-slate-400'
-                                                : 'text-slate-600'
+                                            ? 'line-through text-slate-400'
+                                            : 'text-slate-600'
                                             }`}
                                     >
                                         {alerta.descricao}
@@ -775,17 +776,16 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                         <div className="relative group">
                                             <button
                                                 type="button"
-                                                onClick={(e) => e.preventDefault()}
-                                                title="Acessar financeiro deste evento (Em breve)"
-                                                className="p-1 rounded text-slate-400 bg-slate-50 border border-slate-200/70 cursor-not-allowed"
+                                                onClick={() => navigate(`/financeira/${alerta.seq_evento}`)}
+                                                title="Acessar financeiro deste evento"
+                                                className="p-1 rounded text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition cursor-pointer"
                                             >
                                                 <DollarSign className="w-3 h-3" />
                                             </button>
                                             <span className="pointer-events-none absolute bottom-full right-1/2 translate-x-1/2 mb-1 hidden group-hover:block whitespace-nowrap rounded bg-slate-900 px-1.5 py-0.5 text-[9.5px] font-medium text-white shadow-md z-30">
-                                                Financeiro #{alerta.seq_evento} (em breve)
+                                                Abrir pagamentos do evento #{alerta.seq_evento}
                                             </span>
                                         </div>
-
                                         <div className="relative group">
                                             <button
                                                 type="button"
@@ -796,8 +796,8 @@ export const TabelaAlertas: React.FC<ITabelaAlertasProps> = ({
                                                         : 'Concluir notificação'
                                                 }
                                                 className={`p-1 rounded border transition-all cursor-pointer ${alerta.concluida
-                                                        ? 'text-emerald-600 bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
-                                                        : 'text-slate-500 hover:text-[#1056f5] hover:bg-blue-50 border-transparent hover:border-blue-200'
+                                                    ? 'text-emerald-600 bg-emerald-50 border-emerald-200 hover:bg-emerald-100'
+                                                    : 'text-slate-500 hover:text-[#1056f5] hover:bg-blue-50 border-transparent hover:border-blue-200'
                                                     }`}
                                             >
                                                 {alerta.concluida ? (
